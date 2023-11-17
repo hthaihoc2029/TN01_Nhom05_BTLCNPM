@@ -1,0 +1,68 @@
+.h5{
+    font-family: Montserrat;
+    font-weight: 900;
+    text-align: left;
+}
+
+.general_info{
+    width: 15%;
+    border-radius: 10px;
+}
+.general_attribute{
+    color: #757D8A;
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 700;
+}
+.quantity{
+    color: #404D61;
+    font-family: Roboto;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+#printer_number{
+    background: #d2d0d0;
+}
+
+#paper_number{
+    background: #E3C7EF;
+}
+
+#print_session_number{
+    background: #F8F8F8;
+}
+
+#queue{
+    background: #9BC6E9;
+}
+
+#monitor{
+    height: 63%;
+    width: 92%;
+    margin-left: 3.7%;
+    margin-right: 3.5%;
+    margin-bottom: 4%;
+    border: 1px solid #757D8A;
+    background: #FFF;
+    box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25); 
+}
+
+#search_tool{
+    height: 8.3%;
+}
+#add_printer{
+    border: 2.5px solid #1E5DFF;
+    background: #FFF;
+    color: #1E5DFF;
+    font-family: Roboto;
+    font-weight: 700;
+}
+
+#add_printer:hover{
+    transform: scale(1.05);
+}
+
+/* .table{
+    padding-top: 0px;
+} */

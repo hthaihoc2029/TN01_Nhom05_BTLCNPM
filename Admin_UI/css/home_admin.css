@@ -1,0 +1,25 @@
+#content{
+    /* width: 90%; */
+    height: 80%;
+    border-radius: 15px;
+    margin-top: 3%;
+    margin-left: 3.7%;
+    margin-right: 3.9%;
+    margin-bottom: 5%;
+    background: linear-gradient(289deg, #4834D4 3.21%, rgba(72, 52, 212, 0.00) 97.68%);
+}
+#content>div>p{
+    color: var(--light-primary-80, #1443BD);
+    font-family: Montserrat;   
+    font-weight: 900;
+}   
+
+#content>div>span>span{
+    color: rgba(42, 132, 198, 1);
+}
+
+#content>div>span>a{
+    border-radius: 8px;
+    color: white;
+    background: var(--button-primary-active, linear-gradient(0deg, rgba(13, 50, 144, 0.20) 0%, rgba(16, 54, 151, 0.00) 100%), #1443BD);
+}
