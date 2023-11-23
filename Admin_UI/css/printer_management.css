@@ -1,6 +1,6 @@
 .h5{
-    font-family: Montserrat;
-    font-weight: 900;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
     text-align: left;
 }
 
@@ -10,13 +10,13 @@
 }
 .general_attribute{
     color: #757D8A;
-    font-family: Roboto;
+    font-family: 'Roboto', sans-serif;
     font-size: 16px;
     font-weight: 700;
 }
 .quantity{
     color: #404D61;
-    font-family: Roboto;
+    font-family: 'Roboto', sans-serif;
     font-size: 28px;
     font-weight: 700;
 }
@@ -55,14 +55,73 @@
     border: 2.5px solid #1E5DFF;
     background: #FFF;
     color: #1E5DFF;
-    font-family: Roboto;
+    font-family: 'Roboto', sans-serif;
     font-weight: 700;
 }
 
 #add_printer:hover{
     transform: scale(1.05);
 }
+thead{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    color: var(--gray-700, #464F60);
+}
+tr{
+    font-size: 15px;
+}
+.printer_list_data{
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+}
 
-/* .table{
-    padding-top: 0px;
-} */
+.enable{
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    color: var(--green-500, #14804A);
+    border-radius: 15px;
+    background: var(--green-0, #E1FCEF);
+}
+
+.disable{
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    color: var(--red-500, #D12953);
+    border-radius: 10px;
+    background: var(--red-0, #FAF0F3);
+}
+
+ .delPrinterBtn{
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+}
+.infoPrinterBtn{
+    width: 19px;
+    height: 19px;
+    cursor: pointer;
+}
+
+.toggle_status:checked{
+    background-color: rgba(118, 238, 89, 1);
+    border-color: rgba(118, 238, 89, 1);
+}
+
+#successToast{
+    border-left-color: rgba(0, 204, 153, 1);
+    border-left-width: 3.8px;
+    border-radius: 5px;
+    background: #E3F7F2;
+}
+
+.tick{
+    background-color: rgba(0, 204, 153, 1);
+}
+.Montserrat{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+.Montserrat-500{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}

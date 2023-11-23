@@ -94,3 +94,4 @@ let getAccountBarContent = function(){
 </div>
     `
 }
+
