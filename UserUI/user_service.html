@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SPSS-HOME</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Nunito:wght@300;600;700;800;900;1000&family=Overpass:wght@800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.1/css/bootstrap-datepicker.min.css"
+    />
+
+    <!-- Include Bootstrap Timepicker library -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css"
+    />
+
+    <link rel="stylesheet" href="./css/user_service.css" />
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="headerbar" id="headerbar"></div>
+
+      <div class="body_service">
+        <div class="container">
+          <div class="row gx-1 justify-content-between">
+            <div class="col-md-6 preview">
+              <div class="btn-upload">
+                <h3 id="content-upload">Tải file lên</h3>
+                <br />
+                <i id="icon-upload" class="fa-solid fa-upload fa-2xl"></i>
+              </div>
+              <div>
+                <input name="file" type="file" id="inputFile" />
+                <input type="button" value="Preview" id="btnPrvw" />
+              </div>
+            </div>
+
+            <div class="col-md-6 register">
+              <div class="navbar navbar-light bg-light reg_bar">
+                <button class="col-md-4 btn-func" id="btn1">
+                  1. Tải file lên
+                </button>
+                <button class="col-md-4 btn-func" id="btn2">
+                  2. Chọn máy in
+                </button>
+                <button class="col-md-4 btn-func" id="btn3">
+                  3. Đặt lịch in
+                </button>
+              </div>
+
+              <div class="print-function" id="infoDisplay"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+      var srcContent;
+
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            srcContent = e.target.result;
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+      $(document).ready(function () {
+        $("#inputFile").change(function () {
+          if (this.files[0].name !== "") {
+            readURL(this);
+          }
+        });
+
+        $("#btnPrvw").click(function () {
+          let htmlIframe =
+            '<iframe src="' + srcContent + '" frameborder="0"></iframe>';
+          $(".btn-upload").html(htmlIframe);
+          $("#content-upload").remove();
+          $("#icon-upload").remove();
+          console.log(12382);
+
+          // Moved the preview logic inside the readURL function
+        });
+      });
+    </script>
+
+    <script
+      src="https://kit.fontawesome.com/92606ce77f.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+      crossorigin="anonymous"
+    ></script>
+    <script src="js/user_service.js"></script>
+    <script src="js/user_header.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.1/js/bootstrap-datepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
+  </body>
+</html>

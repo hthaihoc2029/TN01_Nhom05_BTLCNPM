@@ -1,3 +1,4 @@
+@import url();
 .wrapper {
   background-color: white;
   display: flex;
@@ -5,6 +6,25 @@
   height: 100%;
   align-items: center;
   justify-content: center;
+}
+.pass {
+  position: relative;
+}
+input#passid {
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+i {
+  position: absolute;
+  right: 120px;
+  top: 50%;
+  cursor: pointer;
+  user-select: none;
+}
+
+#passid:focus {
+  outline: none;
 }
 
 .header {
@@ -45,7 +65,7 @@
 
   margin-left: 80px;
 
-  font-family: "Nunito", sans-serif;
+  font-family: "Nutito", sans-serif;
   font-style: normal;
   font-weight: 800;
   font-size: 24px;

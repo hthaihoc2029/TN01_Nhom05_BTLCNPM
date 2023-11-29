@@ -33,33 +33,48 @@
 
         <div class="login">
           <h3 class="title_login">ĐĂNG NHẬP VỚI TƯ CÁCH THÀNH VIÊN</h3>
-
-          <div class="username">
-            <label for="userid">Tên đăng nhập</label>
-            <input
-              type="text"
-              placeholder="a.vanbcd@hcmut.edu.vn"
-              id="userid"
-            />
-          </div>
-          <div class="password">
-            <label for="passid">Mật khẩu</label>
-            <input type="password" placeholder="xxxxxx" id="passid" />
-          </div>
-          <div class="more">
-            <div class="more1">
-              <input type="radio" id="remember" />
-              <label for="remember">Ghi nhớ đăng nhập</label>
+          <form action="/UserUI/user_home" method="post">
+            <div class="username">
+              <label for="userid">Tên đăng nhập</label>
+              <input
+                name="username"
+                type="text"
+                placeholder="a.vanbcd@hcmut.edu.vn"
+                id="userid"
+              />
             </div>
-            <a
-              alt=""
-              href="https://sso.hcmut.edu.vn/cas/login?service=https://mybk.hcmut.edu.vn/my/homeSSO.action"
-              >Quên mật khẩu</a
-            >
-          </div>
-          <div class="btn-login">
-            <button>Đăng nhập</button>
-          </div>
+            <div class="password">
+              <label for="passid">Mật khẩu</label>
+              <div class="pass">
+                <input
+                  name="password"
+                  type="password"
+                  placeholder="Enter password"
+                  id="passid"
+                />
+                <span>
+                  <i class="fa-regular fa-eye"></i>
+                </span>
+              </div>
+            </div>
+            <div class="more">
+              <div class="more1">
+                <input type="radio" id="remember" />
+                <label for="remember">Ghi nhớ đăng nhập</label>
+              </div>
+              <a
+                alt=""
+                href="https://sso.hcmut.edu.vn/cas/login?service=https://mybk.hcmut.edu.vn/my/homeSSO.action"
+                >Quên mật khẩu</a
+              >
+            </div>
+            <div class="btn-login">
+              <button id="form-submit" type="submit" class="btn-submit">
+                Đăng nhập
+              </button>
+            </div>
+          </form>
+
           <a class="link-admin" href="/">Đăng nhập với tư cách quản trị viên</a>
         </div>
       </div>
@@ -68,4 +83,9 @@
       </div>
     </div>
   </body>
+  <script src="./js/user_login.js"></script>
+  <script
+    src="https://kit.fontawesome.com/92606ce77f.js"
+    crossorigin="anonymous"
+  ></script>
 </html>
