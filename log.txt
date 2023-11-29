@@ -1,0 +1,90 @@
+commit 96f5ce406c1351c327629d73d46dfa1e84d5e654
+Author: HOC HUYNH <hthaihoc2029@gmail.com>
+Date:   Sun Nov 19 00:01:16 2023 +0700
+
+    user GUI (login+main)
+
+commit 398bee90c3ae2448f7505a84d18d27e7f1279188
+Author: hthaihoc2029 <98394189+hthaihoc2029@users.noreply.github.com>
+Date:   Fri Nov 17 23:31:09 2023 +0700
+
+    Update README.md
+
+commit 5e29d766ec4ba01cdd84ad952c733dbedc68c67a
+Merge: 01b2250 a8bd6c6
+Author: hieugiaosu <phamthehieuvtt123@gmail.com>
+Date:   Fri Nov 17 22:59:05 2023 +0700
+
+    from TheHieu, add some basic admin web UI
+
+commit 01b225097e81ffdae5a872b901744c8c22d7dc81
+Author: hieugiaosu <phamthehieuvtt123@gmail.com>
+Date:   Fri Nov 17 22:57:25 2023 +0700
+
+    from TheHieu, add some basic admin web UI
+
+commit a8bd6c64b1f17ec2d283a383ae841c255657b244
+Author: HOC HUYNH <hthaihoc2029@gmail.com>
+Date:   Fri Nov 17 20:50:07 2023 +0700
+
+    complete Architecture
+
+commit 358f098301d97dac1224cf3db436c806a5bbcc89
+Author: HOC HUYNH <hthaihoc2029@gmail.com>
+Date:   Fri Nov 17 20:44:10 2023 +0700
+
+    delete trash
+
+commit a211a8d511f06f0dcef8a31fd5761f5c5eb883a7
+Author: HOC HUYNH <hthaihoc2029@gmail.com>
+Date:   Fri Nov 17 20:42:48 2023 +0700
+
+    add gitignore
+
+commit 1420050abe1f8b85ae78c380fe65a43a3c254abe
+Author: HOC HUYNH <hthaihoc2029@gmail.com>
+Date:   Fri Nov 17 20:40:02 2023 +0700
+
+    update frontend
+
+commit d7417be9b9cf1fd03b00e33239b0d5ee8eeba15c
+Author: Huỳnh Học <huynhthaihoc@thaihoc.local>
+Date:   Sun Nov 5 15:29:04 2023 +0700
+
+    delete DSstore
+
+commit 911ab35d589f8d2762be77ca90d22b812e34040f
+Author: Huỳnh Học <huynhthaihoc@thaihoc.local>
+Date:   Sun Nov 5 15:26:05 2023 +0700
+
+    create architecture folder
+
+commit 93afac44537917cb1dfda6b5cf73e889ac31d8b9
+Author: Huỳnh Học <huynhthaihoc@thaihoc.local>
+Date:   Sun Nov 5 15:25:09 2023 +0700
+
+    refactor model folder
+
+commit dbe84412fcfc2f112708916e8a44bcb04af901ea
+Author: Huỳnh Học <huynhthaihoc@thaihoc.local>
+Date:   Sun Nov 5 15:11:17 2023 +0700
+
+    upload mvp1
+
+commit da147fbf8d7b9a25ca963efbde3d038fb0c8459b
+Author: Huỳnh Học <huynhthaihoc@thaihoc.local>
+Date:   Sun Nov 5 15:07:41 2023 +0700
+
+    create info folder
+
+commit 099c3528685130f89556500884dc7cd248d82549
+Author: Huỳnh Học <huynhthaihoc@thaihoc.local>
+Date:   Sun Nov 5 15:02:45 2023 +0700
+
+    update README.md
+
+commit 7956ec536415c3b779a5b890cb212def0b17f256
+Author: hthaihoc2029 <98394189+hthaihoc2029@users.noreply.github.com>
+Date:   Sun Nov 5 13:24:09 2023 +0700
+
+    Initial commit
