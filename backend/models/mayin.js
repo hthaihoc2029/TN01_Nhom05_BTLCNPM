@@ -35,11 +35,15 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     CongSuat: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(255),
       allowNull: true
     },
     TrongLuong: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    DoPhanGiai: {
+      type: DataTypes.STRING(255),
       allowNull: true
     },
     Kieu: {
@@ -47,7 +51,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     TocDoIn: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(255),
       allowNull: true
     },
     KichThuoc: {
@@ -55,7 +59,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     BoNho: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(255),
       allowNull: true
     },
     AnhMayIn: {

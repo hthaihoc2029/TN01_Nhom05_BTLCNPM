@@ -98,6 +98,7 @@ const updatePrinterDetails = async (req, res) => {
     printer.KichThuoc = req.body.KichThuoc;
     printer.BoNho = req.body.BoNho;
     printer.AnhMayIn = req.body.AnhMayIn;
+    printer.DoPhanGiai = req.body.DoPhanGiai;
     await printer.save();
     res.json({ message: "Printer saved successfully", ID: printer.ID });
   } catch (error) {

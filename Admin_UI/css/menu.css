@@ -6,12 +6,13 @@
 #logo{
     width: 68px;
     height: 50px;
+    cursor: pointer;
 }
 
 .menu_text{
     color: #000;
     text-align: center;
-    font-family: Montserrat;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     font-size: 10px;
     text-decoration: none;
@@ -20,7 +21,7 @@
 .menu_widget{
     width: 90%;
     border-radius: 15.091px;
-    
+    cursor: pointer;
 }
 
 .menu_widget:hover{
@@ -34,7 +35,7 @@
 
 .logout_widget>a{
     color: #E5613E;
-    font-family: Montserrat;
+    font-family: 'Montserrat', sans-serif;
     text-decoration: none;
     font-size: 12px;
     font-weight: 700;
@@ -51,7 +52,7 @@
 
 #account_bar>div>span{
     color: #000;
-    font-family: Montserrat;
+    font-family: 'Montserrat', sans-serif;
     font-size: 20.121px;
     font-weight: 700;
 }

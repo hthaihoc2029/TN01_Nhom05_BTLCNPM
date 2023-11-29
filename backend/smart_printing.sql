@@ -1,37 +1,40 @@
-DROP DATABASE smart_printing;
+DROP DATABASE if exists smart_printing;
 CREATE DATABASE smart_printing;
 USE smart_printing;
 
 CREATE TABLE NguoiDung (
-	ID VARCHAR(16) PRIMARY KEY,
-	Ten VARCHAR(255) NOT NULL,
-	TenDangNhap VARCHAR(255) NOT NULL,
+	STT INT NOT NULL DEFAULT 0,
+    ID VARCHAR(16) PRIMARY KEY,
+    Ten VARCHAR(255) NOT NULL,
+    TenDangNhap VARCHAR(255) NOT NULL,
     MatKhau VARCHAR(255) NOT NULL,
-	SoLuongGiay INT,
-	VaiTro VARCHAR(255) NOT NULL,
+    SoLuongGiay INT,
+    VaiTro VARCHAR(255) NOT NULL,
     RefreshToken TEXT
 );
 
 CREATE TABLE LuotMuaGiay (
-	ID VARCHAR(16) PRIMARY KEY,
-	ThoiGian TIMESTAMP NOT NULL,
-	Loai VARCHAR(255) NOT NULL,
-	SoLuong INT NOT NULL,
-	ID_NguoiDung VARCHAR(16) NOT NULL,
-	PhuongThucThanhToan VARCHAR(255) NOT NULL,
-	FOREIGN KEY (ID_NguoiDung) REFERENCES NguoiDung(ID)
+	STT INT NOT NULL DEFAULT 1,
+    ID VARCHAR(16) PRIMARY KEY,
+    ThoiGian TIMESTAMP NOT NULL,
+    Loai VARCHAR(255) NOT NULL,
+    SoLuong INT NOT NULL,
+    ID_NguoiDung VARCHAR(16) NOT NULL,
+    PhuongThucThanhToan VARCHAR(255) NOT NULL,
+    FOREIGN KEY (ID_NguoiDung)
+        REFERENCES NguoiDung (ID)
 );
 
 -- Quản trị viên
 CREATE TABLE QuanTriVien (
-	ID VARCHAR(16) PRIMARY KEY,
-	Ten VARCHAR(255) NOT NULL,
-	TenDangNhap VARCHAR(255) NOT NULL,
-	ChucVu VARCHAR(255) NOT NULL
+STT INT NOT NULL DEFAULT 1,
+    ID VARCHAR(16) PRIMARY KEY,
+    Ten VARCHAR(255) NOT NULL,
+    TenDangNhap VARCHAR(255) NOT NULL,
+    ChucVu VARCHAR(255) NOT NULL
 );
-
--- Lượt in
 CREATE TABLE LuotIn (
+STT INT NOT NULL DEFAULT 1,
 	ID VARCHAR(16) PRIMARY KEY,
 	ThoiGian TIMESTAMP NOT NULL,
 	TinhTrang VARCHAR(255),
@@ -57,6 +60,7 @@ CREATE TABLE TaiLieu (
 
 -- Máy in
 CREATE TABLE MayIn (
+	STT INT NOT NULL DEFAULT 1,
 	ID VARCHAR(16) PRIMARY KEY,
 	Hang VARCHAR(255),
 	Model VARCHAR(255),
@@ -65,12 +69,13 @@ CREATE TABLE MayIn (
 	ViTri VARCHAR(255),
 	TinhTrang VARCHAR(255),
 	InMau BOOLEAN,
-	CongSuat INT,
-	TrongLuong INT,
+	CongSuat VARCHAR(255),
+	TrongLuong VARCHAR(255),
+    DoPhanGiai VARCHAR(255),
 	Kieu VARCHAR(255),
-	TocDoIn INT,
+	TocDoIn VARCHAR(255),
 	KichThuoc VARCHAR(255),
-	BoNho INT,
+	BoNho VARCHAR(255),
 	AnhMayIn VARCHAR(255)
 );
 
@@ -107,6 +112,7 @@ CREATE TABLE QuanLyMayIn (
 
 -- Tin nhắn
 CREATE TABLE TinNhan (
+	STT INT NOT NULL DEFAULT 1,
 	ID VARCHAR(16) PRIMARY KEY,
 	NoiDung TEXT,
 	TieuDe VARCHAR(255),
@@ -119,18 +125,14 @@ CREATE TABLE TinNhan (
 
 -- Quản lý tin nhắn
 CREATE TABLE QuanLyTinNhan (
-	ID_TinNhan VARCHAR(16),
-	ID_QuanTriVien VARCHAR(16),
-	PRIMARY KEY (ID_TinNhan, ID_QuanTriVien),
-	FOREIGN KEY (ID_TinNhan) REFERENCES TinNhan(ID),
-	FOREIGN KEY (ID_QuanTriVien) REFERENCES QuanTriVien(ID)
+    ID_TinNhan VARCHAR(16),
+    ID_QuanTriVien VARCHAR(16),
+    PRIMARY KEY (ID_TinNhan , ID_QuanTriVien),
+    FOREIGN KEY (ID_TinNhan)
+        REFERENCES TinNhan (ID),
+    FOREIGN KEY (ID_QuanTriVien)
+        REFERENCES QuanTriVien (ID)
 );
-
-
-
-
-
-	-- Stored Procedure Lịch sử in của máy in 
 
 	DELIMITER //
 
@@ -306,75 +308,134 @@ CALL UserPrintingHistory()
 	DELIMITER ;
 
 	-- CALL PrintedDocument('ND0003');
+DELIMITER //
+CREATE TRIGGER generateIDPRINTER BEFORE INSERT ON mayin
+FOR EACH ROW
+BEGIN
+    SET NEW.STT = IFNULL((SELECT MAX(STT) + 1 FROM mayin), 01);
+    SET NEW.ID = CONCAT('MI', LPAD(NEW.STT, 4, '0'));
+END;
+//
+DELIMITER ;
+
+    DELIMITER //
+CREATE TRIGGER generateIDNGUOIDUNG BEFORE INSERT ON nguoidung
+FOR EACH ROW
+BEGIN
+    SET NEW.STT = IFNULL((SELECT MAX(STT) + 1 FROM nguoidung), 0);
+    SET NEW.ID = CONCAT('ND', LPAD(NEW.STT, 4, '0'));
+END;
+//
+DELIMITER ;
+
+    DELIMITER //
+CREATE TRIGGER generateIDLUOTMUAGIAY BEFORE INSERT ON LUOTMUAGIAY
+FOR EACH ROW
+BEGIN
+    SET NEW.STT = IFNULL((SELECT MAX(STT) + 1 FROM LUOTMUAGIAY), 0);
+    SET NEW.ID = CONCAT('MG', LPAD(NEW.STT, 4, '0'));
+END;
+//
+DELIMITER ;
+
+    DELIMITER //
+CREATE TRIGGER generateIDQUANTRIVIEN BEFORE INSERT ON QUANTRIVIEN
+FOR EACH ROW
+BEGIN
+    SET NEW.STT = IFNULL((SELECT MAX(STT) + 1 FROM QUANTRIVIEN), 0);
+    SET NEW.ID = CONCAT('QT', LPAD(NEW.STT, 4, '0'));
+END;
+//
+DELIMITER ;
+    DELIMITER //
+CREATE TRIGGER generateIDLUOTIN BEFORE INSERT ON LUOTIN
+FOR EACH ROW
+BEGIN
+    SET NEW.STT = IFNULL((SELECT MAX(STT) + 1 FROM LUOTIN), 0);
+    SET NEW.ID = CONCAT('LI', LPAD(NEW.STT, 4, '0'));
+END;
+//
+DELIMITER ;
+DELIMITER //
+CREATE TRIGGER generateIDTINNHAN BEFORE INSERT ON TINNHAN
+FOR EACH ROW
+BEGIN
+    SET NEW.STT = IFNULL((SELECT MAX(STT) + 1 FROM TINNHAN), 0);
+    SET NEW.ID = CONCAT('TN', LPAD(NEW.STT, 4, '0'));
+END;
+//
+DELIMITER ;
 
 
 
 
 	-- Insert into Người Dùng table
-	INSERT INTO NguoiDung (ID, Ten, TenDangNhap, MatKhau, SoLuongGiay, VaiTro) VALUES
-	('ND0001', 'Nguyễn Văn A', 'A.Nguyen', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',80, 'Student'),
-	('ND0002', 'Trần Thị B', 'B.Tran', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',120, 'Lecturer'),
-	('ND0003', 'Lê Văn C', 'C.Le', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',90, 'Student'),
-	('ND0004', 'Phạm Thị D', 'D.Pham', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',110, 'Lecturer'),
-	('ND0005', 'Hoàng Văn E', 'E.Hoang', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',70, 'Student'),
-	('ND0006', 'Ngô Thị F', 'F.Ngo', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',130, 'Lecturer'),
-	('ND0007', 'Đặng Văn G', 'G.Dang', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',100, 'Student'),
-	('ND0008', 'Bùi Thị H', 'H.Bui', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',150, 'Lecturer'),
-	('ND0009', 'Vũ Văn I', 'I.Vu', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',85, 'Student'),
-	('ND0010', 'Trương Thị K', 'K.Truong', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',95, 'Lecturer');
-	INSERT INTO NguoiDung (ID, Ten, TenDangNhap,MatKhau, SoLuongGiay, VaiTro) VALUES
-	('ND0000', 'Mọi người', 'everyone','$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', 00, 'System');
+    INSERT INTO NguoiDung ( Ten, TenDangNhap,MatKhau, SoLuongGiay, VaiTro) VALUES
+	('Mọi người', 'everyone','$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', 00, 'System');
+	
+	INSERT INTO NguoiDung ( Ten, TenDangNhap, MatKhau, SoLuongGiay, VaiTro) VALUES
+	('Nguyễn Văn A', 'A.Nguyen', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',80, 'Student'),
+	('Trần Thị B', 'B.Tran', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',120, 'Lecturer'),
+	('Lê Văn C', 'C.Le', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',90, 'Student'),
+	('Phạm Thị D', 'D.Pham', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',110, 'Lecturer'),
+	('Hoàng Văn E', 'E.Hoang', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',70, 'Student'),
+	('Ngô Thị F', 'F.Ngo', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',130, 'Lecturer'),
+	('Đặng Văn G', 'G.Dang', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',100, 'Student'),
+	('Bùi Thị H', 'H.Bui', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',150, 'Lecturer'),
+	('Vũ Văn I', 'I.Vu', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',85, 'Student'),
+	('Trương Thị K', 'K.Truong', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',95, 'Lecturer');
 	-- Insert into Quản trị viên table
-	INSERT INTO QuanTriVien (ID, Ten, TenDangNhap, ChucVu) VALUES
-	('QT0001', 'Nguyễn Thị L', 'L.Nguyen', 'Officer'),
-	('QT0002', 'Trần Văn M', 'M.Tran', 'Manager'),
-	('QT0003', 'Lê Thị N', 'N.Le', ''),
-	('QT0004', 'Phạm Văn P', 'P.Pham', 'Manager'),
-	('QT0005', 'Hoàng Thị Q', 'Q.Hoang', 'Officer'),
-	('QT0006', 'Ngô Văn R', 'R.Ngo', 'Director');
+	INSERT INTO QuanTriVien (Ten, TenDangNhap, ChucVu) VALUES
+	('Nguyễn Thị L', 'NguyenHoang', 'Officer'),
+	('Trần Văn M', 'TheHieu', 'Manager'),
+	('Lê Thị N', 'XuanTho', ''),
+	('Phạm Văn P', 'TuanMinh', 'Manager'),
+	('Hoàng Thị Q', 'TienTa', 'Officer'),
+	('Ngô Văn R', 'ThaiHoc', 'Director'),
+    ('Hoàng Thị Q', 'AnhKhoa', 'Officer');
 
 
 	-- Insert into LuotMuaGiay table
-	INSERT INTO LuotMuaGiay (ID, ThoiGian, Loai, SoLuong, ID_NguoiDung, PhuongThucThanhToan) VALUES
-	('MG0001', '2023-04-12 14:00:00', 'A4', 150, 'ND0001', 'BKPay'),
-	('MG0002', '2023-05-18 10:30:00', 'Letter', 80, 'ND0002', 'Momo'),
-	('MG0003', '2023-06-25 08:45:00', 'A3', 120, 'ND0003', 'OCB'),
-	('MG0004', '2023-07-02 16:20:00', 'A4', 200, 'ND0004', 'BKPay'),
-	('MG0005', '2023-08-09 12:15:00', 'Letter', 90, 'ND0005', 'Momo'),
-	('MG0006', '2023-09-14 09:30:00', 'A3', 110, 'ND0006', 'OCB'),
-	('MG0007', '2023-10-20 11:45:00', 'A4', 180, 'ND0007', 'BKPay'),
-	('MG0008', '2023-11-27 13:00:00', 'Letter', 100, 'ND0008', 'Momo'),
-	('MG0009', '2023-12-03 14:30:00', 'A3', 130, 'ND0009', 'OCB'),
-	('MG0010', '2024-01-10 09:00:00', 'A4', 160, 'ND0010', 'BKPay'),
-	('MG0011', '2024-02-17 15:45:00', 'Letter', 120, 'ND0001', 'Momo'),
-	('MG0012', '2024-03-25 08:30:00', 'A3', 140, 'ND0002', 'OCB'),
-	('MG0013', '2024-04-01 16:10:00', 'A4', 180, 'ND0003', 'BKPay'),
-	('MG0014', '2024-05-08 12:00:00', 'Letter', 110, 'ND0004', 'Momo'),
-	('MG0015', '2024-06-14 10:15:00', 'A3', 100, 'ND0005', 'OCB');
+	INSERT INTO LuotMuaGiay (ThoiGian, Loai, SoLuong, ID_NguoiDung, PhuongThucThanhToan) VALUES
+	('2023-04-12 14:00:00', 'A4', 150, 'ND0001', 'BKPay'),
+	('2023-05-18 10:30:00', 'Letter', 80, 'ND0002', 'Momo'),
+	('2023-06-25 08:45:00', 'A3', 120, 'ND0003', 'OCB'),
+	('2023-07-02 16:20:00', 'A4', 200, 'ND0004', 'BKPay'),
+	('2023-08-09 12:15:00', 'Letter', 90, 'ND0005', 'Momo'),
+	('2023-09-14 09:30:00', 'A3', 110, 'ND0006', 'OCB'),
+	('2023-10-20 11:45:00', 'A4', 180, 'ND0007', 'BKPay'),
+	('2023-11-27 13:00:00', 'Letter', 100, 'ND0008', 'Momo'),
+	('2023-12-03 14:30:00', 'A3', 130, 'ND0009', 'OCB'),
+	('2024-01-10 09:00:00', 'A4', 160, 'ND0010', 'BKPay'),
+	('2024-02-17 15:45:00', 'Letter', 120, 'ND0001', 'Momo'),
+	('2024-03-25 08:30:00', 'A3', 140, 'ND0002', 'OCB'),
+	('2024-04-01 16:10:00', 'A4', 180, 'ND0003', 'BKPay'),
+	('2024-05-08 12:00:00', 'Letter', 110, 'ND0004', 'Momo'),
+	('2024-06-14 10:15:00', 'A3', 100, 'ND0005', 'OCB');
 
 
 	-- Insert feedback messages from users to admin
-	INSERT INTO TinNhan (ID, NoiDung, TieuDe, Loai, ThoiGian, ID_NguoiDung) VALUES
-	('TN0001', 'Mình có một gợi ý để cải thiện dịch vụ in ấn.', 'Phản Hồi của Người Dùng', 'Phản Hồi', '2023-05-15 09:30:00', 'ND0001'),
-	('TN0002', 'Có vẻ như có một vấn đề với máy in ở 302B1.', 'Vấn Đề Kỹ Thuật', 'Vấn Đề', '2023-06-22 14:45:00', 'ND0002'),
-	('TN0003', 'Liệu chúng ta có thể thêm nhiều tùy chọn in hơn không?', 'Yêu Cầu Tính Năng', 'Yêu Cầu', '2023-07-30 11:15:00', 'ND0003');
+	INSERT INTO TinNhan (NoiDung, TieuDe, Loai, ThoiGian, ID_NguoiDung) VALUES
+	('Mình có một gợi ý để cải thiện dịch vụ in ấn.', 'Phản Hồi của Người Dùng', 'Phản Hồi', '2023-05-15 09:30:00', 'ND0001'),
+	('Có vẻ như có một vấn đề với máy in ở 302B1.', 'Vấn Đề Kỹ Thuật', 'Vấn Đề', '2023-06-22 14:45:00', 'ND0002'),
+	('Liệu chúng ta có thể thêm nhiều tùy chọn in hơn không?', 'Yêu Cầu Tính Năng', 'Yêu Cầu', '2023-07-30 11:15:00', 'ND0003');
 	-- Insert feedback messages from users to admin
-	INSERT INTO TinNhan (ID, NoiDung, TieuDe, Loai, ThoiGian, ID_NguoiDung) VALUES
-	('TN0007', 'Dịch vụ in của bạn thật sự tuyệt vời!', 'Cảm ơn', 'Phản Hồi', '2023-11-20 08:30:00', 'ND0004'),
-	('TN0008', 'Máy in của chúng tôi đang hoạt động không đúng. Bạn có thể kiểm tra giúp không?', 'Báo Lỗi', 'Vấn Đề', '2024-01-05 16:00:00', 'ND0005'),
-	('TN0009', 'Các tùy chọn in màu thêm vào rất phong cách!', 'Phản Hồi', 'Phản Hồi', '2024-02-12 09:45:00', 'ND0006');
+	INSERT INTO TinNhan (NoiDung, TieuDe, Loai, ThoiGian, ID_NguoiDung) VALUES
+	('Dịch vụ in của bạn thật sự tuyệt vời!', 'Cảm ơn', 'Phản Hồi', '2023-11-20 08:30:00', 'ND0004'),
+	('Máy in của chúng tôi đang hoạt động không đúng. Bạn có thể kiểm tra giúp không?', 'Báo Lỗi', 'Vấn Đề', '2024-01-05 16:00:00', 'ND0005'),
+	('Các tùy chọn in màu thêm vào rất phong cách!', 'Phản Hồi', 'Phản Hồi', '2024-02-12 09:45:00', 'ND0006');
 	-- Insert notifications from admin to users
-	INSERT INTO TinNhan (ID, NoiDung, TieuDe, Loai, ThoiGian, ID_NguoiDung) VALUES
-	('TN0004', 'Các tính năng in mới đã được thêm vào! Hãy kiểm tra chúng.', 'Cập Nhật Dịch Vụ', 'Thông Báo', '2023-08-10 10:00:00', 'ND0000'),
-	('TN0005', 'Bảo dưỡng sẽ được thực hiện trên các máy in vào tuần tới.', 'Thông Báo Bảo Dưỡng', 'Thông Báo', '2023-09-05 15:30:00', 'ND0000'),
-	('TN0006', 'Nhắc nhở: Hãy sử dụng máy in một cách có trách nhiệm.', 'Nhắc Nhở Sử Dụng', 'Thông Báo', '2023-10-12 13:45:00', 'ND0000');
+	INSERT INTO TinNhan (NoiDung, TieuDe, Loai, ThoiGian, ID_NguoiDung) VALUES
+	('Các tính năng in mới đã được thêm vào! Hãy kiểm tra chúng.', 'Cập Nhật Dịch Vụ', 'Thông Báo', '2023-08-10 10:00:00', 'ND0000'),
+	('Bảo dưỡng sẽ được thực hiện trên các máy in vào tuần tới.', 'Thông Báo Bảo Dưỡng', 'Thông Báo', '2023-09-05 15:30:00', 'ND0000'),
+	('Nhắc nhở: Hãy sử dụng máy in một cách có trách nhiệm.', 'Nhắc Nhở Sử Dụng', 'Thông Báo', '2023-10-12 13:45:00', 'ND0000');
 	-- Insert notifications from admin to users
-	INSERT INTO TinNhan (ID, NoiDung, TieuDe, Loai, ThoiGian, ID_NguoiDung) VALUES
-	('TN0010', 'Chúc mừng bạn đã đạt được cột mốc mới trong việc in ấn!', 'Thành Tích', 'Thông Báo', '2024-03-10 10:30:00', 'ND0000'),
-	('TN0011', 'Lịch bảo dưỡng cho các máy in đã được cập nhật. Xin lưu ý!', 'Thông Báo Bảo Dưỡng', 'Thông Báo', '2024-04-15 14:15:00', 'ND0000'),
-	('TN0012', 'Thông báo quan trọng về việc nâng cấp hệ thống in.', 'Cập Nhật Hệ Thống', 'Thông Báo', '2024-05-22 11:30:00', 'ND0000'),
-	('TN0013', 'Chúc mừng bạn đã được thăng chức lên vị trí mới!', 'Thăng Chức', 'Thông Báo', '2024-06-28 13:45:00', 'ND0000'),
-	('TN0014', 'Hãy kiểm tra email của bạn để biết thông tin cập nhật mới nhất.', 'Thông Báo Quan Trọng', 'Thông Báo', '2024-07-05 09:00:00', 'ND0000');
+	INSERT INTO TinNhan (NoiDung, TieuDe, Loai, ThoiGian, ID_NguoiDung) VALUES
+	('Chúc mừng bạn đã đạt được cột mốc mới trong việc in ấn!', 'Thành Tích', 'Thông Báo', '2024-03-10 10:30:00', 'ND0000'),
+	('Lịch bảo dưỡng cho các máy in đã được cập nhật. Xin lưu ý!', 'Thông Báo Bảo Dưỡng', 'Thông Báo', '2024-04-15 14:15:00', 'ND0000'),
+	('Thông báo quan trọng về việc nâng cấp hệ thống in.', 'Cập Nhật Hệ Thống', 'Thông Báo', '2024-05-22 11:30:00', 'ND0000'),
+	('Chúc mừng bạn đã được thăng chức lên vị trí mới!', 'Thăng Chức', 'Thông Báo', '2024-06-28 13:45:00', 'ND0000'),
+	('Hãy kiểm tra email của bạn để biết thông tin cập nhật mới nhất.', 'Thông Báo Quan Trọng', 'Thông Báo', '2024-07-05 09:00:00', 'ND0000');
 
 	INSERT INTO QuanLyTinNhan (ID_QuanTriVien, ID_TinNhan) VALUES
 	('QT0001', 'TN0001'),
@@ -392,16 +453,14 @@ CALL UserPrintingHistory()
 	('QT0002', 'TN0010'),
 	('QT0004', 'TN0011'),
 	('QT0004', 'TN0012'),
-	('QT0004', 'TN0013'),
-	('QT0005', 'TN0014');
-
+	('QT0004', 'TN0013');
 	-- Insert data into MayIn table
-	INSERT INTO MayIn (ID, Hang, Model, KhayGiay, LoaiMuc, ViTri, TinhTrang, InMau, CongSuat, TrongLuong, Kieu, TocDoIn, KichThuoc, BoNho, AnhMayIn ) VALUES
-	('MI0001', 'HP', 'MFP M236DW', '150 tờ/1 khay', 'HP 136X W1360X Đen', '302B1', 'Working', TRUE, 5000, 20, 'Laser', 30, 'A4', 1024 , 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png'),
-	('MI0002', 'Canon', 'GM3055', '100 tờ/2 khay', 'Canon CL-741', '106A5', 'Working', FALSE, 4000, 18, 'Inkjet', 25, 'Letter', 512, 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png'),
-	('MI0003', 'Canon', 'GM2070', '150-100 tờ/2 khay', 'Canon CL-222', '101H1', 'Working', TRUE, 12600, 22, 'Laser', 35, 'A3', 2048, 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png'),
-	('MI0004', 'HP', 'MFP M435DW', '150 tờ/1 khay', 'HP 134X W1340X Đen', '203H6', 'Disabled', TRUE, 3700, 25, 'Laser', 40, 'A4', 1024, 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png'),
-	('MI0005', 'Canon', 'LBP2900', '200 tờ/1 khay', 'Canon K2240X ', '103C6', 'Working', FALSE, 14500, 20, 'Inkjet', 30, 'Letter', 768, 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png');
+	INSERT INTO MayIn (Hang, Model, KhayGiay, LoaiMuc, ViTri, TinhTrang, InMau, CongSuat, TrongLuong, DoPhanGiai, Kieu, TocDoIn, KichThuoc, BoNho, AnhMayIn ) VALUES
+	('HP', 'MFP M236DW', '150 tờ/1 khay', 'HP 136X W1360X Đen', '302B1', 'Working', TRUE, '500 Tờ', '60 kg', '600x600 dpi', 'Laser', '30 trang/phút', '418 x 308 x 294.4 mm', '1024 MB' , 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png'),
+	('Canon', 'GM3055', '100 tờ/2 khay', 'Canon CL-741', '106A5', 'Working', FALSE, '4000 Tờ', '50 kg','600x600 dpi', 'Inkjet', '35 trang/phút', '418 x 308 x 494.4 mm', '512 MB' , 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png'),
+	('Canon', 'GM2070', '150-100 tờ/2 khay', 'Canon CL-222', '101H1', 'Working', TRUE, '12900 Tờ', '70 kg','600x600 dpi', 'Laser', '25 trang/phút', '518 x 408 x 994.4 mm', '2048 MB', 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png'),
+	('HP', 'MFP M435DW', '150 tờ/1 khay', 'HP 134X W1340X Đen', '203H6', 'Disabled', TRUE, '10500 Tờ', '30 kg', '600x600 dpi','Laser', '40 trang/phút', '418 x 308 x 294.4 mm', '1024 MB', 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png'),
+	('Canon', 'LBP2900', '200 tờ/1 khay', 'Canon K2240X ', '103C6', 'Working', FALSE, '1500 Tờ', '30 kg', '600x600 dpi','Inkjet', '30 trang/phút', '418 x 308 x 294.4 mm', '768 MB', 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png');
 
 
 	-- Insert data into QuanLyMayIn table
@@ -439,32 +498,32 @@ CALL UserPrintingHistory()
 	('MI0005', 'C4');
 
 	-- Insert data into LuotIn table with administrator IDs in the range (1, 6)
-	INSERT INTO LuotIn (ID, ThoiGian, TinhTrang, ID_QuanTriVien) VALUES
-	('LI0001', '2023-04-10 08:30:00', 'Đang In', 'QT0001'),
-	('LI0002', '2023-05-15 10:00:00', 'Hoàn Thành', 'QT0002'),
-	('LI0003', '2023-06-20 13:45:00', 'Đang In', 'QT0003'),
-	('LI0004', '2023-07-25 15:30:00', 'Chờ Xử Lý', 'QT0004'),
-	('LI0005', '2023-08-30 09:15:00', 'Hoàn Thành', 'QT0005'),
-	('LI0006', '2023-09-05 14:00:00', 'Chờ Xử Lý', 'QT0001'),
-	('LI0007', '2023-10-10 11:45:00', 'Hoàn Thành', 'QT0002'),
-	('LI0008', '2023-11-15 09:30:00', 'Đang In', 'QT0003'),
-	('LI0009', '2023-12-20 12:15:00', 'Chờ Xử Lý', 'QT0004'),
-	('LI0010', '2024-01-25 16:45:00', 'Hoàn Thành', 'QT0005'),
-	('LI0011', '2024-02-29 08:00:00', 'Đang In', 'QT0001'),
-	('LI0012', '2024-03-05 14:30:00', 'Chờ Xử Lý', 'QT0002'),
-	('LI0013', '2024-04-10 10:15:00', 'Hoàn Thành', 'QT0003'),
-	('LI0014', '2024-05-15 13:00:00', 'Chờ Xử Lý', 'QT0004'),
-	('LI0015', '2024-06-20 15:45:00', 'Đang In', 'QT0005'),
-	('LI0016', '2024-07-25 11:30:00', 'Hoàn Thành', 'QT0001'),
-	('LI0017', '2024-08-30 09:00:00', 'Đang In', 'QT0002'),
-	('LI0018', '2024-09-05 14:45:00', 'Chờ Xử Lý', 'QT0003'),
-	('LI0019', '2024-10-10 12:30:00', 'Hoàn Thành', 'QT0004'),
-	('LI0020', '2024-11-15 08:15:00', 'Đang In', 'QT0005'),
-	('LI0021', '2024-12-20 15:30:00', 'Chờ Xử Lý', 'QT0001'),
-	('LI0022', '2025-01-25 13:45:00', 'Hoàn Thành', 'QT0002'),
-	('LI0023', '2025-02-28 10:30:00', 'Đang In', 'QT0003'),
-	('LI0024', '2025-03-05 16:00:00', 'Chờ Xử Lý', 'QT0004'),
-	('LI0025', '2025-04-10 14:15:00', 'Hoàn Thành', 'QT0005');
+	INSERT INTO LuotIn (ThoiGian, TinhTrang, ID_QuanTriVien) VALUES
+	('2023-04-10 08:30:00', 'Đang In', 'QT0001'),
+	('2023-05-15 10:00:00', 'Hoàn Thành', 'QT0002'),
+	('2023-06-20 13:45:00', 'Đang In', 'QT0003'),
+	('2023-07-25 15:30:00', 'Chờ Xử Lý', 'QT0004'),
+	('2023-08-30 09:15:00', 'Hoàn Thành', 'QT0005'),
+	('2023-09-05 14:00:00', 'Chờ Xử Lý', 'QT0001'),
+	('2023-10-10 11:45:00', 'Hoàn Thành', 'QT0002'),
+	('2023-11-15 09:30:00', 'Đang In', 'QT0003'),
+	('2023-12-20 12:15:00', 'Chờ Xử Lý', 'QT0004'),
+	('2024-01-25 16:45:00', 'Hoàn Thành', 'QT0005'),
+	('2024-02-29 08:00:00', 'Đang In', 'QT0001'),
+	('2024-03-05 14:30:00', 'Chờ Xử Lý', 'QT0002'),
+	('2024-04-10 10:15:00', 'Hoàn Thành', 'QT0003'),
+	('2024-05-15 13:00:00', 'Chờ Xử Lý', 'QT0004'),
+	('2024-06-20 15:45:00', 'Đang In', 'QT0005'),
+	('2024-07-25 11:30:00', 'Hoàn Thành', 'QT0001'),
+	('2024-08-30 09:00:00', 'Đang In', 'QT0002'),
+	('2024-09-05 14:45:00', 'Chờ Xử Lý', 'QT0003'),
+	('2024-10-10 12:30:00', 'Hoàn Thành', 'QT0004'),
+	('2024-11-15 08:15:00', 'Đang In', 'QT0005'),
+	('2024-12-20 15:30:00', 'Chờ Xử Lý', 'QT0001'),
+	('2025-01-25 13:45:00', 'Hoàn Thành', 'QT0002'),
+	('2025-02-28 10:30:00', 'Đang In', 'QT0003'),
+	('2025-03-05 16:00:00', 'Chờ Xử Lý', 'QT0004'),
+	('2025-04-10 14:15:00', 'Hoàn Thành', 'QT0005');
 
 
 	-- Insert more data into TaiLieu table with 2-3 documents for each ID_LuotIn
@@ -575,14 +634,14 @@ CALL UserPrintingHistory()
 	('Document85', 'LI0022', 46, 3, 'A3', 'https://drive.google.com/file/d/12AiWS8-BvyYpuKWfoJNDUcNLLKChh_tl/view?usp=sharing', 52),
 	('Document86', 'LI0022', 50, 2, 'B4', 'https://drive.google.com/file/d/12AiWS8-BvyYpuKWfoJNDUcNLLKChh_tl/view?usp=sharing', 53),
 	-- ID_LuotIn: LI0024
-	('Document90', 'LI0024', 42, 4, 'A4', 'https://drive.google.com/file/d/15LzjQeoaKsAWClzEvk7g5XkFst3GsChy/view?usp=sharing', 54),
-	('Document91', 'LI0024', 46, 3, 'A3', 'https://drive.google.com/file/d/12AiWS8-BvyYpuKWfoJNDUcNLLKChh_tl/view?usp=sharing', 55),
-	('Document92', 'LI0024', 50, 2, 'B4', 'https://drive.google.com/file/d/12AiWS8-BvyYpuKWfoJNDUcNLLKChh_tl/view?usp=sharing', 56),
+	('Document90', 'LI0023', 42, 4, 'A4', 'https://drive.google.com/file/d/15LzjQeoaKsAWClzEvk7g5XkFst3GsChy/view?usp=sharing', 54),
+	('Document91', 'LI0023', 46, 3, 'A3', 'https://drive.google.com/file/d/12AiWS8-BvyYpuKWfoJNDUcNLLKChh_tl/view?usp=sharing', 55),
+	('Document92', 'LI0023', 50, 2, 'B4', 'https://drive.google.com/file/d/12AiWS8-BvyYpuKWfoJNDUcNLLKChh_tl/view?usp=sharing', 56),
 
 	-- ID_LuotIn: LI0025
-	('Document93', 'LI0025', 42, 4, 'A4', 'https://drive.google.com/file/d/15LzjQeoaKsAWClzEvk7g5XkFst3GsChy/view?usp=sharing', 57),
-	('Document94', 'LI0025', 46, 3, 'A3', 'https://drive.google.com/file/d/12AiWS8-BvyYpuKWfoJNDUcNLLKChh_tl/view?usp=sharing', 58),
-	('Document95', 'LI0025', 50, 2, 'B4', 'https://drive.google.com/file/d/15LzjQeoaKsAWClzEvk7g5XkFst3GsChy/view?usp=sharing', 59);
+	('Document93', 'LI0024', 42, 4, 'A4', 'https://drive.google.com/file/d/15LzjQeoaKsAWClzEvk7g5XkFst3GsChy/view?usp=sharing', 57),
+	('Document94', 'LI0024', 46, 3, 'A3', 'https://drive.google.com/file/d/12AiWS8-BvyYpuKWfoJNDUcNLLKChh_tl/view?usp=sharing', 58),
+	('Document95', 'LI0024', 50, 2, 'B4', 'https://drive.google.com/file/d/15LzjQeoaKsAWClzEvk7g5XkFst3GsChy/view?usp=sharing', 59);
 
 
 	-- Insert data into InAn table with shuffled values for ID_MayIn and ID_NguoiDung
@@ -610,6 +669,4 @@ CALL UserPrintingHistory()
 	('LI0021', 'MI0005', 'ND0001'),
 	('LI0022', 'MI0003', 'ND0002'),
 	('LI0023', 'MI0002', 'ND0008'),
-	('LI0024', 'MI0001', 'ND0004'),
-	('LI0025', 'MI0004', 'ND0003');
-
+	('LI0024', 'MI0001', 'ND0004');
