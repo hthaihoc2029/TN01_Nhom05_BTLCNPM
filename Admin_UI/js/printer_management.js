@@ -57,6 +57,10 @@ function showSuccessToast(){
     let toast = new bootstrap.Toast($('#successToast'))
     toast.show()
 }
+function showFailToast(){
+    let toast = new bootstrap.Toast($('#failToast'))
+    toast.show()
+}
 
 $(document).ready(function() {
     $('#menu').html(getMenuContent())
@@ -89,6 +93,11 @@ $(document).ready(function() {
     $(document).keydown(function(e){
         if (e.key=='s') {
             showSuccessToast()
+        } else if (e.key=='f'){
+            showFailToast()
         }
+    })
+    $('.btn-check').click(function(){
+        $('.btn-check').not(this).prop('checked',!this.checked)
     })
 });
