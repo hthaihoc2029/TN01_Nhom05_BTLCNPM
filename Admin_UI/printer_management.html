@@ -134,8 +134,11 @@
           <div class="row d-flex theme-color ms-5 mt-2">THÊM MỚI MÁY IN</div>
           <form class="container row">
             <div class="col-4">
-              <div class="m-auto border">
-                
+              <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+                <div class="border d-flex justify-content-center align-items-center" id="upload-image">
+                    <button class="btn" type="button">Thêm ảnh</button>
+                    <input class="form-control" type="file" id="formFile" name="formFile" style="display: none;" required>
+                </div>
               </div>
             </div>
             <div class="col-8">
@@ -155,16 +158,16 @@
             </div>
             <div class="row ms-5">
                 <div class="col-3 changable" id="firm">
-                  <input type="input" class="form-control change-detail rounded-pill w-75 px-1 Montserrat" name="firm">
+                  <input type="input" class="form-control change-detail rounded-pill w-75 px-1 Montserrat" name="firm" required>
                 </div>
                 <div class="col-3" id="model">
-                  <input type="input" class="form-control change-detail rounded-pill w-75 px-1 Montserrat" name="model">
+                  <input type="input" class="form-control change-detail rounded-pill w-75 px-1 Montserrat" name="model" required>
                 </div>
                 <div class="col-3 changable" id="location">
-                    <input type="input" class="form-control change-detail rounded-pill w-75 px-1 Montserrat" name="location">
+                    <input type="input" class="form-control change-detail rounded-pill w-75 px-1 Montserrat" name="location" required>
                 </div>
                 <div class="col-3 changable" id="type_printer">
-                    <input type="input" class="form-control change-detail rounded-pill w-100 px-1 Montserrat" name="type_printer">
+                    <input type="input" class="form-control change-detail rounded-pill w-100 px-1 Montserrat" name="type_printer" required>
                 </div>
             </div>
             <div class="row ms-5 mt-5 theme-color">
@@ -180,13 +183,13 @@
             </div>
             <div class="row ms-5">
                 <div class="col-3 changable" id="speed">
-                    <input type="input" class="Montserrat form-control change-detail rounded-pill px-1 Montserrat" name="speed"> 
+                    <input type="input" class="Montserrat form-control change-detail rounded-pill px-1 Montserrat" name="speed" required> 
                 </div>
                 <div class="col-3 changable" id="memory">
-                    <input type="input" class="Montserrat form-control change-detail rounded-pill px-1" name="memory"> 
+                    <input type="input" class="Montserrat form-control change-detail rounded-pill px-1" name="memory" required> 
                 </div>
                 <div class="col-6 changable" id="resolution">
-                    <input type="input" class="Montserrat form-control change-detail rounded-pill px-1 w-75" name="resolution"> 
+                    <input type="input" class="Montserrat form-control change-detail rounded-pill px-1 w-75" name="resolution" required> 
                 </div>
             </div>
             <div class="row ms-5 mt-5 theme-color">
@@ -211,10 +214,10 @@
                     </div>
                 </div>
                 <div class="col-3 changable" id="capacity">
-                    <input type="input" class="Montserrat form-control change-detail rounded-pill px-1" name="capacity"> 
+                    <input type="input" class="Montserrat form-control change-detail rounded-pill px-1" name="capacity" required> 
                 </div>
                 <div class="col-6 changable" id="ink">
-                    <input type="input" class="Montserrat form-control change-detail rounded-pill px-1 w-75" name="ink">
+                    <input type="input" class="Montserrat form-control change-detail rounded-pill px-1 w-75" name="ink" required>
                 </div>
             </div>
             <div class="row ms-5 mt-5 theme-color">
@@ -240,13 +243,13 @@
             </div>
             <div class="row ms-5 mb-4">
                 <div class="col-3 changable" id="watt">
-                    <input type="input" class="Montserrat form-control change-detail rounded-pill px-1" name="watt"> 
+                    <input type="input" class="Montserrat form-control change-detail rounded-pill px-1" name="watt" required> 
                 </div>
                 <div class="col-3 changable" id="weight">
-                    <input type="input" class="Montserrat form-control change-detail rounded-pill px-1" name="weight"> 
+                    <input type="input" class="Montserrat form-control change-detail rounded-pill px-1" name="weight" required> 
                 </div>
                 <div class="col-6 changable" id="shape">
-                    <input type="input" class="Montserrat form-control change-detail rounded-pill px-1 w-75" name="shape"> 
+                    <input type="input" class="Montserrat form-control change-detail rounded-pill px-1 w-75" name="shape" required> 
             </div>
             <div class="row-flex mt-2 d-flex justify-content-end">
               <button type="button" class="btn btn-secondary mx-1" data-bs-dismiss="modal">Hủy</button>

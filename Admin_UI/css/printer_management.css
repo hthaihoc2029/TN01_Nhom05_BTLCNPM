@@ -144,3 +144,8 @@ tr{
 .btn-check:checked + label{
     color: black;
 }
+
+#upload-image{
+    width: 70%;
+    aspect-ratio: 1 / 1;
+}
