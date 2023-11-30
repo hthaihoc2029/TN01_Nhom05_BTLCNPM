@@ -1,7 +1,3 @@
-function showSuccessToast(){
-    let toast = new bootstrap.Toast($('#successToast'))
-    toast.show()
-}
 let resetinput = async function(res){
     $(".changable>input").css('color','black')
     $("#location>input").val(res.ViTri)
@@ -82,7 +78,7 @@ $(document).ready(async function(){
         $('#editmode').click()
         updateInfo(res)
         if (temp.message=="Printer saved successfully") {
-            showSuccessToast()
+            showToast('successToast',"Máy in đã được cập nhật thông tin")
         }
     })
 

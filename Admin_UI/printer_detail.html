@@ -206,18 +206,39 @@
             <div class="ms-2">
                 <span class="Montserrat">Thành công</span>
                 <br>
-                <span class="Montserrat-500">Máy in đã được cập nhật thông tin</span>́
+                <span class="Montserrat-500 toast-message">Máy in đã được cập nhật thông tin</span>́
             </div>
         </div>
       </div>
     </div>
-  </div>
-
+</div>
+<div class="toast-container position-fixed bottom-0 start-0 p-3">
+    <div id="failToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-body pt-0">
+        <div class="row d-flex justify-content-end">
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="row-flex d-flex">
+            <div class="rounded-circle w-auto p-2 cross">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="24" viewBox="0 0 22 22" fill="none" class="pt-1">
+                    <path d="M9.42256 7.79002L16.4827 0.729919L18.4994 2.74668L11.4393 9.80678L18.4994 16.8669L16.4827 18.8836L9.42256 11.8235L2.36247 18.8836L0.345703 16.8669L7.4058 9.80678L0.345703 2.74668L2.36247 0.729919L9.42256 7.79002Z" fill="white"/>
+                    </svg>
+            </div>
+            <div class="ms-2">
+                <span class="Montserrat">Thất bại</span>
+                <br>
+                <span class="Montserrat-500 toast-message"></span>́
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
 <script
   src="https://code.jquery.com/jquery-3.7.1.js"
   integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
   crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+<script src="js/ultil.js"></script>
 <script src="js/printer_detail.js"></script>
 </body>
 </html>

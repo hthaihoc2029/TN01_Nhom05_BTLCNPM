@@ -76,7 +76,15 @@
     
     background: #E3F7F2;
 }
-
+#failToast{
+    border-left-color: #EB5757;
+    border-left-width: 3.8px;
+    border-radius: 5px;
+    background: #FAECEC;
+}
 .tick{
     background-color: rgba(0, 204, 153, 1);
+}
+.cross{
+    background-color: #EB5757;
 }

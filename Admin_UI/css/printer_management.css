@@ -149,3 +149,6 @@ tr{
     width: 70%;
     aspect-ratio: 1 / 1;
 }
+#upload-image>button:hover{
+    transform: scale(1.1);
+}

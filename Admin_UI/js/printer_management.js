@@ -5,15 +5,6 @@ async function getPrinterInfo(){
     // implement
     let tmp = await fetch('http://localhost:3001/printers');
     let res = await tmp.json();
-    // .then(
-    //     (res) => res.json()
-    // )
-    // .then((data) => {
-    //     res = data;
-    //     console.log(res)
-    // })
-    // return [{'ID':'0001','model':'aaaa','location':"H1",'status':1},{'ID':'0002','model':'aaaa','location':"H6",'status':0}];
-    console.log(res)
     return res
 }
 
@@ -22,8 +13,6 @@ this play general
 */
 async function displayPrinterInfo(begin,end){
     let printerInfo = await getPrinterInfo()
-    // console.log(printerInfo)
-    // $("tbody").html('')
     for (let printer=0;printer<printerInfo.length;printer++){
         let row = `
             <tr id="row${printer}">
@@ -48,10 +37,12 @@ async function displayPrinterInfo(begin,end){
                 </span>
             </td>
             <td scope="col pt-0 my-0 p-0" class="text-center">
-            <a href="printer_detail.html?printerid=${printerInfo[printer].ID}">
+            <a href="printer_detail.html?printerid=${printerInfo[printer].ID}" class="btn p-0 border-0">
                 <img src="image/admin_printer/info.png" alt="info" class="infoPrinterBtn" id="info${printer}">
-            </a>    
-                <img src="image/admin_printer/delete.png" alt="del" class="delPrinterBtn" id="del${printer}">
+            </a> 
+            <button class="btn p-0 border-0" type="button" onclick="deletePrinter('${printerInfo[printer].ID}')">   
+                <img src="image/admin_printer/delete.png" alt="del" class="delPrinterBtn" id="del${printerInfo[printer].ID}">
+            </button>
             </td>
             <td scope="col pt-0">
             <div class="form-check form-switch p-0 m-0 toggle-status">
@@ -71,24 +62,35 @@ function toggleStatus(id){
     fetch(`http://localhost:3001/printers/${id}/status`,{method:"PUT"})
     .then(res=>res.json())
     .then(data => {
-        showSuccessToast()
+        showToast('successToast',"Thay đổi trạng thái thành công")
         $('tbody').html('')
         displayPrinterInfo(0,10)
     })
     .catch(err => {
-        showFailToast()
+        showToast('failToast',"Thay đổi trạng thái thất bại")
     })
-    
-}
-function showSuccessToast(){
-    let toast = new bootstrap.Toast($('#successToast'))
-    toast.show()
-}
-function showFailToast(){
-    let toast = new bootstrap.Toast($('#failToast'))
-    toast.show()
-}
 
+}
+function deletePrinter(id){
+    $.ajax({
+        url:`http://localhost:3001/printers/${id}`,
+        type:'DELETE',
+        success: function(msg){
+            console.log(msg)
+            if (msg.message == "Printer deleted successfully"){
+                showToast('successToast',"Máy in đã được xóa")
+                $('tbody').html('')
+                displayPrinterInfo(0,10)
+            } else {
+                console.log(msg)
+                showToast('failToast',"Xóa máy in không thành công")
+            }
+        },
+        error: function(){
+            showToast('failToast',"Xóa máy in không thành công")
+        }   
+    });
+}
 $(document).ready(function() {
     $('#menu').html(getMenuContent())
     $('#account_bar').html(getAccountBarContent())
@@ -114,20 +116,9 @@ $(document).ready(function() {
         }
     });
 
-    $(document).keydown(function(e){
-        if (e.key=='s') {
-            showSuccessToast()
-        } else if (e.key=='f'){
-            showFailToast()
-        }
-    })
     $('.btn-check').click(function(){
         $('.btn-check').not(this).prop('checked',!this.checked)
     })
-    $('#toggleMI0001').click(function(){
-        console.log(1)
-    })
-
     $('#upload-image>button').click(function() {
         
     })
@@ -136,27 +127,54 @@ $(document).ready(function() {
         e.preventDefault()
 
         let data = {
-            'Hang' : e.target['firm'].value,
-            'KhayGiay' : $("#capacity>input").val(),
-            'LoaiMuc' : $("#ink>input").val(),
-            'ViTri' : $("#location>input").val(),
-            'TinhTrang' : $("#status>span").text() == 'Kích hoạt' ? 'Working' : 'Disabled',
+            'ID': 'MI0099',
+            'Hang' : escapeHtml(e.target['firm'].value),
+            'Model': escapeHtml($("#model>input").val()),
+            'KhayGiay' : escapeHtml($("#capacity>input").val()),
+            'LoaiMuc' : escapeHtml($("#ink>input").val()),
+            'ViTri' :escapeHtml($("#location>input").val()),
+            'TinhTrang' : escapeHtml($("#status>span").text() == 'Kích hoạt' ? 'Working' : 'Disabled'),
             'InMau' : $("#yes").is(":checked"),
-            'CongSuat' : $("#watt>input").val(),
-            'TrongLuong' : $("#weight>input").val(),
-            'Kieu' : $("#type_printer>input").val(),
-            'TocDoIn' : $("#speed>input").val(),
-            'KichThuoc' : $("#shape>input").val(),
-            'BoNho' : $("#memory>input").val(),
+            'CongSuat' : escapeHtml($("#watt>input").val()),
+            'TrongLuong' : escapeHtml($("#weight>input").val()),
+            'Kieu' : escapeHtml($("#type_printer>input").val()),
+            'TocDoIn' : escapeHtml($("#speed>input").val()),
+            'KichThuoc' : escapeHtml($("#shape>input").val()),
+            'BoNho' : escapeHtml($("#memory>input").val()),
             'AnhMayIn' : 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png',
-            'DoPhanGiai' : $("#resolution>span").text(),
+            'DoPhanGiai' : escapeHtml($("#resolution>input").val()),
         }
-
-        for (let index = 0; index < e.target.length; index++) {
-            // const element = array[index];
-            console.log(index, e.target[index])
-            
+        let preprocessedInput = preprocessInput(...["TocDoIn", "BoNho", "DoPhanGiai", "KhayGiay", "CongSuat", "TrongLuong", "KichThuoc"].map(key=> data[key]))
+        for (let i = 0;i<preprocessedInput.length;i++){
+            let key = ["TocDoIn", "BoNho", "DoPhanGiai", "KhayGiay", "CongSuat", "TrongLuong", "KichThuoc"];
+            data[key[i]] = preprocessedInput[i];
         }
-        console.log(e.target['firm'].value)
+        let valid = validateInput(...preprocessedInput)
+        console.log(data)
+        if (!valid) {
+            showToast('failToast',"Thông tin không hợp lệ");
+            return;
+        } else {
+        $.ajax({
+            url: 'http://localhost:3001/printers/',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(msg){
+                console.log(msg);
+                if (msg.message == "Printer added successfully"){
+                    showToast('successToast',"Thêm máy in thành công")
+                    $('tbody').html('')
+                    $('.cancel-form').click()
+                    displayPrinterInfo(0,10)
+                } else {
+                    showToast('failToast',"Thêm máy in thấy bại")
+                }
+            },
+            error: function(){
+                showToast('failToast',"Thêm máy in thất bại")
+            }
+        })
+    }
     })
 });
