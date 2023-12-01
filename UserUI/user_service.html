@@ -101,7 +101,15 @@
       }
     </script>
     <script>
+      function deleteFile(fileId) {
+        // Remove the button and span with the same ID
+        $("#" + fileId).remove();
+        $("#span-" + fileId).remove();
+        $("#br-" + fileId).remove();
+      }
       var srcContent;
+      var fileName;
+      var fileCount = 1;
 
       function readURL(input) {
         if (input.files && input.files[0]) {
@@ -109,6 +117,7 @@
           reader.onload = function (e) {
             srcContent = e.target.result;
           };
+          fileName = input.files[0].name;
           reader.readAsDataURL(input.files[0]);
         }
       }
@@ -126,8 +135,23 @@
           $(".btn-upload").html(htmlIframe);
           $("#content-upload").remove();
           $("#icon-upload").remove();
+          let htmlIconDelete = "";
+          let htmlFileName =
+            '<button onclick="deleteFile(id)" class="delete-file" id="delete-file' +
+            fileCount +
+            '"><i class="fa-regular fa-circle-xmark"></i></button>' +
+            "<span id='span-delete-file" +
+            fileCount +
+            "'>" +
+            " " +
+            fileName +
+            "</span> <br id='br-delete-file" +
+            fileCount +
+            "'/>";
 
-          // Moved the preview logic inside the readURL function
+          console.log(htmlFileName);
+          $(htmlFileName).appendTo("div.list-files");
+          fileCount++;
         });
       });
     </script>

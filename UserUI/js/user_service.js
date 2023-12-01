@@ -91,6 +91,8 @@ let getBtn1Content = function () {
      </div>
  </div>
  <h3>File in</h3>
+ <div class="list-files">
+ </div>
 </div>`;
 };
 
