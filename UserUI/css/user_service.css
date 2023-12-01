@@ -239,3 +239,21 @@ form {
 #save_config:hover {
   background-color: #45a049;
 }
+
+label[for="selectedDate"],
+label[for="selectedTime"] {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.time-date {
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#selectedDate,
+#selectedTime {
+  padding: 5px;
+  font-size: 16px;
+}

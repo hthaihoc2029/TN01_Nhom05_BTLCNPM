@@ -25,7 +25,11 @@
     <!-- Include Bootstrap Timepicker library -->
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css"
+      href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css"
     />
 
     <link rel="stylesheet" href="./css/user_service.css" />
@@ -71,6 +75,32 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
+      function validateDate() {
+        const inputDate = $("#selectedDate").datepicker("getDate");
+
+        // Check if selected date is not null
+        if (inputDate !== null) {
+          alert("Date is valid!");
+        } else {
+          alert(
+            "Please select a valid date within the next 7 days (excluding weekends)."
+          );
+        }
+      }
+      function validateTime() {
+        const selectedTime = $("#selectedTime").val();
+
+        // Check if selected time is not empty
+        if (selectedTime !== "") {
+          alert("Time is valid!");
+        } else {
+          alert(
+            "Please select a valid time between 7:00 and 17:00 with 30-minute intervals."
+          );
+        }
+      }
+    </script>
+    <script>
       var srcContent;
 
       function readURL(input) {
@@ -96,7 +126,6 @@
           $(".btn-upload").html(htmlIframe);
           $("#content-upload").remove();
           $("#icon-upload").remove();
-          console.log(12382);
 
           // Moved the preview logic inside the readURL function
         });
@@ -113,14 +142,14 @@
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
       crossorigin="anonymous"
     ></script>
-    <script src="js/user_service.js"></script>
-    <script src="js/user_header.js"></script>
     <script
       src="https://code.jquery.com/jquery-3.7.1.js"
       integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
       crossorigin="anonymous"
     ></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.1/js/bootstrap-datepicker.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js"></script>
+    <script src="js/user_service.js"></script>
+    <script src="js/user_header.js"></script>
   </body>
 </html>

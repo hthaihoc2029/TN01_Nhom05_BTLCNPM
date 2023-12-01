@@ -16,27 +16,20 @@ document.addEventListener("DOMContentLoaded", function () {
   // Lắng nghe sự kiện click trên nút 3
   document.getElementById("btn3").addEventListener("click", function () {
     displayInfo(getBtn3Content());
-    var date = new Date();
-    var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
-    // Datepicker initialization
-    $("#datepicker1").datepicker({
-      format: "mm/dd/yyyy",
-      todayHighlight: true,
-      startDate: today,
-      endDate: "12/25/2023",
-      autoclose: true,
+    $("#selectedTime").timepicker({
+      timeFormat: "H:i", // 24-hour format
+      minTime: "7:00am",
+      maxTime: "5:00pm",
+      step: 30, // 30-minute intervals
     });
-
-    // Set default date for datepicker
-    $("#datepicker1").datepicker("setDate", today);
-
-    // Timepicker initialization with restricted hours
-    $(".timepicker").timepicker({
-      showMeridian: false,
-      defaultTime: "07:00",
-      maxHours: 17,
-      minuteStep: 10,
+    $("#selectedDate").datepicker({
+      minDate: 0, // Minimum date is today
+      maxDate: "+7D", // Maximum date is 7 days from today
+      beforeShowDay: function (date) {
+        // Disable weekends (Saturday: 6, Sunday: 0)
+        var day = date.getDay();
+        return [day !== 0 && day !== 6, ""];
+      },
     });
   });
 
@@ -89,7 +82,7 @@ let getBtn1Content = function () {
      <input list="paper_size" placeholder="Select" id="paperSizeInput" />
      <datalist id="paper_size">
          <option value="A4"></option>
-         <option value="Letter"></option>
+         <option value="A5"></option>
      </datalist>
  </form>
 
@@ -102,42 +95,26 @@ let getBtn1Content = function () {
 };
 
 function getBtn3Content() {
-  return `<div class="row">
-  <div class="col-md-6">
-    <div class="panel">
-      <fieldset>
-        <div class="form-group">
-          <label for="datepicker1">Chọn ngày</label>
-          <div class="input-group">
-            <input type="text" class="form-control" id="datepicker1" />
-            <span class="input-group-addon">
-            <i class="fa-regular fa-calendar"></i>
-            </span>
-          </div>
-        </div>
-      </fieldset>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="panel">
-      <fieldset>
-        <div class="form-group">
-          <label for="timepicker1">Chọn giờ</label>
-          <div class="input-group">
-            <input
-              type="text"
-              class="form-control timepicker"
-              id="timepicker1"
-            />
-            <span class="input-group-addon"
-              ><i class="fas fa-clock"></i>
-              </span>
-          </div>
-        </div>
-      </fieldset>
-    </div>
-  </div>
-</div>`;
+  return `<form id="dateForm">
+  <label for="selectedDate"
+    >Chọn ngày (trong vòng 7 ngày kế tiếp, trong giờ hành chính):</label
+  >
+  <input type="text" id="selectedDate" required />
+  <i class="fa-regular fa-calendar"></i>
+  <button class="time-date" type="button" onclick="validateDate()">
+    Save
+  </button>
+</form>
+<form id="timeForm">
+  <label for="selectedTime"
+    >Chọn giờ (trong khoảng 7:00 đến 17:00):</label
+  >
+  <input type="text" id="selectedTime" required />
+  <i class="fa-regular fa-clock"></i>
+  <button class="time-date" type="button" onclick="validateTime()">
+    Save
+  </button>
+</form>`;
 }
 
 function savePrintSettings() {
