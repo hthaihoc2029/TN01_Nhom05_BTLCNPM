@@ -150,7 +150,6 @@ $(document).ready(function() {
             data[key[i]] = preprocessedInput[i];
         }
         let valid = validateInput(...preprocessedInput)
-        console.log(data)
         if (!valid) {
             showToast('failToast',"Thông tin không hợp lệ");
             return;

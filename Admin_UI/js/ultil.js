@@ -1,6 +1,6 @@
 // Function for preprocessing input
 function preprocessInput(speed, memory, resolution, capacity, watt, weight, shape) {
-    const units = [" trang/phút", " MB", " dpi", " tờ/khay", " tờ", " kg", " mm"];
+    const units = [" trang/phút", " mb", " dpi", " tờ/khay", " tờ", " kg", " mm"];
     const inputArray = [speed, memory, resolution, capacity, watt, weight, shape];
     for (let i = 0; i < inputArray.length; i++) {
         inputArray[i] = inputArray[i].toLowerCase()
@@ -20,7 +20,7 @@ function preprocessInput(speed, memory, resolution, capacity, watt, weight, shap
 // Function for validation
 function validateInput(speed, memory, resolution, capacity, watt, weight, shape) {
     const regex1 = /^\d+ trang\/phút$/;
-    const regex2 = /^\d+ MB$/;
+    const regex2 = /^\d+ mb$/;
     const regex3 = /^(\d+(\.\d+)?) x (\d+(\.\d+)?) dpi$/;
     const regex4 = /^\d+ tờ\/khay$/;
     const regex5 = /^\d+ tờ$/;
@@ -52,4 +52,25 @@ function showToast(id,msg){
     $('.toast-message').html(msg)
     let toast = new bootstrap.Toast($(`#${id}`))
     toast.show()
+}
+
+function dateProcess(dateString){
+    let date = new Date(dateString);
+    let dd = date.getDate();
+    let mm = date.getMonth();
+    let yyyy = date.getFullYear();
+    if (dd<10) dd = '0'+dd;
+    if (mm<10) mm = '0'+mm;
+    return dd+'/'+mm+'/'+yyyy;
+}
+
+function timeProcess(dateString){
+    let date = new Date(dateString);
+    let hh = date.getHours();
+    let mm = date.getMinutes();
+    let ss = date.getSeconds();
+    if (hh<10) hh = '0'+hh;
+    if (mm<10) mm = '0' + mm;
+    if (ss<10) ss = '0' + ss;
+    return hh+":"+mm+":"+ss;
 }

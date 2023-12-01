@@ -88,3 +88,41 @@
 .cross{
     background-color: #EB5757;
 }
+thead, th, thead>tr{
+    background: #F3F6F9;
+    color: #464E5F;
+    border-radius: 6px;
+}
+footer{
+    font-size: 12px;
+}
+
+.successStatus{
+    color: #1BC5BD;
+    font-size: 12px;
+    background: #C9F7F5;
+}
+
+.waitingStatus{
+    color: #111111;
+    font-size: 12px;
+    background: #DDDDDD;
+}
+
+.inprogressStatus{
+    color: #F9B572;
+    font-size: 12px;
+    background: #FFD89C;
+}
+
+.failingStatus{
+    color: #F74A4A;
+    font-size: 12px;
+    background: rgba(247, 74, 74, 0.56);
+}
+.table-responsive {
+    max-height:100%;
+}
+#pageNumber{
+    width: 10%;
+}
