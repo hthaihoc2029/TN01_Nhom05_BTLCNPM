@@ -10,7 +10,10 @@ table {
   table-layout: fixed;
   border-collapse: collapse;
 }
+
 .table-title {
+  padding-top: 15px;
+  padding-bottom: 20px;
   color: #000;
   font-family: Montserrat;
   font-size: 35px;

@@ -11,6 +11,20 @@ document.addEventListener("DOMContentLoaded", function () {
   // Lắng nghe sự kiện click trên nút 2
   document.getElementById("btn2").addEventListener("click", function () {
     displayInfo(getBtn2Content());
+    var buttons = document.querySelectorAll(".btn-select");
+
+    // Add click event listener to each button
+    buttons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        // Remove 'clicked' class from all buttons
+        buttons.forEach(function (btn) {
+          btn.classList.remove("clicked");
+        });
+
+        // Add 'clicked' class to the clicked button
+        button.classList.add("clicked");
+      });
+    });
   });
 
   // Lắng nghe sự kiện click trên nút 3

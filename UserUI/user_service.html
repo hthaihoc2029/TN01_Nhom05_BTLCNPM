@@ -76,23 +76,6 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // Get all buttons with class 'btn-select'
-        var buttons = document.querySelectorAll(".btn-select");
-
-        // Add click event listener to each button
-        buttons.forEach(function (button) {
-          button.addEventListener("click", function () {
-            // Remove 'clicked' class from all buttons
-            buttons.forEach(function (btn) {
-              btn.classList.remove("clicked");
-            });
-
-            // Add 'clicked' class to the clicked button
-            button.classList.add("clicked");
-          });
-        });
-      });
       function validateDate() {
         const inputDate = $("#selectedDate").datepicker("getDate");
 
