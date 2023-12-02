@@ -1,47 +1,47 @@
 $(document).ready(function () {
-  $("#headerbar").html(getMenuContent());
+	$("#headerbar").html(getMenuContent());
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Lắng nghe sự kiện click trên nút 1
-  document.getElementById("btn1").addEventListener("click", function () {
-    displayInfo(getBtn1Content());
-  });
+	// Lắng nghe sự kiện click trên nút 1
+	document.getElementById("btn1").addEventListener("click", function () {
+		displayInfo(getBtn1Content());
+	});
 
-  // Lắng nghe sự kiện click trên nút 2
-  document.getElementById("btn2").addEventListener("click", function () {
-    displayInfo(getBtn2Content());
-  });
+	// Lắng nghe sự kiện click trên nút 2
+	document.getElementById("btn2").addEventListener("click", function () {
+		displayInfo(getBtn2Content());
+	});
 
-  // Lắng nghe sự kiện click trên nút 3
-  document.getElementById("btn3").addEventListener("click", function () {
-    displayInfo(getBtn3Content());
-    $("#selectedTime").timepicker({
-      timeFormat: "H:i", // 24-hour format
-      minTime: "7:00am",
-      maxTime: "5:00pm",
-      step: 30, // 30-minute intervals
-    });
-    $("#selectedDate").datepicker({
-      minDate: 0, // Minimum date is today
-      maxDate: "+7D", // Maximum date is 7 days from today
-      beforeShowDay: function (date) {
-        // Disable weekends (Saturday: 6, Sunday: 0)
-        var day = date.getDay();
-        return [day !== 0 && day !== 6, ""];
-      },
-    });
-  });
+	// Lắng nghe sự kiện click trên nút 3
+	document.getElementById("btn3").addEventListener("click", function () {
+		displayInfo(getBtn3Content());
+		$("#selectedTime").timepicker({
+			timeFormat: "H:i", // 24-hour format
+			minTime: "7:00am",
+			maxTime: "5:00pm",
+			step: 30, // 30-minute intervals
+		});
+		$("#selectedDate").datepicker({
+			minDate: 0, // Minimum date is today
+			maxDate: "+7D", // Maximum date is 7 days from today
+			beforeShowDay: function (date) {
+				// Disable weekends (Saturday: 6, Sunday: 0)
+				var day = date.getDay();
+				return [day !== 0 && day !== 6, ""];
+			},
+		});
+	});
 
-  // Hàm hiển thị thông tin
-  function displayInfo(info) {
-    // Hiển thị thông tin trong phần tử có id là 'infoDisplay'
-    document.getElementById("infoDisplay").innerHTML = info;
-  }
+	// Hàm hiển thị thông tin
+	function displayInfo(info) {
+		// Hiển thị thông tin trong phần tử có id là 'infoDisplay'
+		document.getElementById("infoDisplay").innerHTML = info;
+	}
 });
 
 let getBtn1Content = function () {
-  return `<div class="content-btn1">
+	return `<div class="content-btn1">
 
   <div class="config">
      <h3>Thông số in</h3>
@@ -97,7 +97,7 @@ let getBtn1Content = function () {
 };
 
 let getBtn2Content = function () {
-  return `<div class="table-title">Máy in khả dụng</div>
+	return `<div class="table-title">Máy in khả dụng</div>
    <div class="table-header">
      <table>
        <thead>
@@ -258,7 +258,7 @@ let getBtn2Content = function () {
 };
 
 function getBtn3Content() {
-  return `<form id="dateForm">
+	return `<form id="dateForm">
   <label for="selectedDate"
     >Chọn ngày (trong vòng 7 ngày kế tiếp, trong giờ hành chính):</label
   >
@@ -281,30 +281,30 @@ function getBtn3Content() {
 }
 
 function savePrintSettings() {
-  // Get values from the forms
-  var direction = document.querySelector("#directionInput").value;
-  var pageRange = document.querySelector("#pageRangeInput").value;
-  var numCopies = document.querySelector("#copyInput").value;
-  var printType = document.querySelector("#printTypeInput").value;
-  var paperSize = document.querySelector("#paperSizeInput").value;
+	// Get values from the forms
+	var direction = document.querySelector("#directionInput").value;
+	var pageRange = document.querySelector("#pageRangeInput").value;
+	var numCopies = document.querySelector("#copyInput").value;
+	var printType = document.querySelector("#printTypeInput").value;
+	var paperSize = document.querySelector("#paperSizeInput").value;
 
-  // Check if any field is empty
-  if (!direction || !pageRange || !numCopies || !printType || !paperSize) {
-    alert("Vui lòng điền đầy đủ thông tin!");
-    return;
-  }
+	// Check if any field is empty
+	if (!direction || !pageRange || !numCopies || !printType || !paperSize) {
+		alert("Vui lòng điền đầy đủ thông tin!");
+		return;
+	}
 
-  // Perform save or further processing here
-  var message =
-    "Hướng in: " +
-    direction +
-    "\nSố trang: " +
-    pageRange +
-    "\nSố bản: " +
-    numCopies +
-    "\nKiểu in: " +
-    printType +
-    "\nCỡ giấy: " +
-    paperSize;
-  alert("Thông số đã được lưu thành công!\n\n" + message);
+	// Perform save or further processing here
+	var message =
+		"Hướng in: " +
+		direction +
+		"\nSố trang: " +
+		pageRange +
+		"\nSố bản: " +
+		numCopies +
+		"\nKiểu in: " +
+		printType +
+		"\nCỡ giấy: " +
+		paperSize;
+	alert("Thông số đã được lưu thành công!\n\n" + message);
 }

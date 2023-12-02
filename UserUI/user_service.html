@@ -1,198 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SPSS-HOME</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Nunito:wght@300;600;700;800;900;1000&family=Overpass:wght@800&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
-    />
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>SPSS-HOME</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Nunito:wght@300;600;700;800;900;1000&family=Overpass:wght@800&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+			crossorigin="anonymous"
+		/>
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.1/css/bootstrap-datepicker.min.css"
-    />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.1/css/bootstrap-datepicker.min.css"
+		/>
 
-    <!-- Include Bootstrap Timepicker library -->
-    <link
-      rel="stylesheet"
-      href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css"
-    />
+		<!-- Include Bootstrap Timepicker library -->
+		<link
+			rel="stylesheet"
+			href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css"
+		/>
 
-    <link rel="stylesheet" href="./css/user_service.css" />
-    <link rel="stylesheet" href="./css/user_selectprinter.css" />
-  </head>
+		<link rel="stylesheet" href="./css/user_service.css" />
+		<link rel="stylesheet" href="./css/user_selectprinter.css" />
+	</head>
 
-  <body>
-    <div class="wrapper">
-      <div class="headerbar" id="headerbar"></div>
+	<body>
+		<div class="wrapper">
+			<div class="headerbar" id="headerbar"></div>
 
-      <div class="body_service">
-        <div class="container">
-          <div class="row gx-1 justify-content-between">
-            <div class="col-md-6 preview">
-              <div class="btn-upload">
-                <h3 id="content-upload">Tải file lên</h3>
-                <br />
-                <i id="icon-upload" class="fa-solid fa-upload fa-2xl"></i>
-              </div>
-              <div>
-                <input name="file" type="file" id="inputFile" />
-                <input type="button" value="Preview" id="btnPrvw" />
-              </div>
-            </div>
+			<div class="body_service">
+				<div class="container">
+					<div class="row gx-1 justify-content-between">
+						<div class="col-md-6 preview">
+							<div class="btn-upload">
+								<h3 id="content-upload">Tải file lên</h3>
+								<br />
+								<i
+									id="icon-upload"
+									class="fa-solid fa-upload fa-2xl"
+								></i>
+							</div>
+							<div>
+								<input name="file" type="file" id="inputFile" />
+								<input
+									type="button"
+									value="Preview"
+									id="btnPrvw"
+								/>
+							</div>
+						</div>
 
-            <div class="col-md-6 register">
-              <div class="navbar navbar-light bg-light reg_bar">
-                <button class="col-md-4 btn-func" id="btn1">
-                  1. Tải file lên
-                </button>
-                <button class="col-md-4 btn-func" id="btn2">
-                  2. Chọn máy in
-                </button>
-                <button class="col-md-4 btn-func" id="btn3">
-                  3. Đặt lịch in
-                </button>
-              </div>
+						<div class="col-md-6 register">
+							<div class="navbar navbar-light bg-light reg_bar">
+								<button class="col-md-4 btn-func" id="btn1">
+									1. Tải file lên
+								</button>
+								<button class="col-md-4 btn-func" id="btn2">
+									2. Chọn máy in
+								</button>
+								<button class="col-md-4 btn-func" id="btn3">
+									3. Đặt lịch in
+								</button>
+							</div>
 
-              <div class="print-function" id="infoDisplay"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // Get all buttons with class 'btn-select'
-        var buttons = document.querySelectorAll(".btn-select");
+							<div class="print-function" id="infoDisplay"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				// Get all buttons with class 'btn-select'
+				var buttons = document.querySelectorAll(".btn-select");
 
-        // Add click event listener to each button
-        buttons.forEach(function (button) {
-          button.addEventListener("click", function () {
-            // Remove 'clicked' class from all buttons
-            buttons.forEach(function (btn) {
-              btn.classList.remove("clicked");
-            });
+				// Add click event listener to each button
+				buttons.forEach(function (button) {
+					button.addEventListener("click", function () {
+						// Remove 'clicked' class from all buttons
+						buttons.forEach(function (btn) {
+							btn.classList.remove("clicked");
+						});
 
-            // Add 'clicked' class to the clicked button
-            button.classList.add("clicked");
-          });
-        });
-      });
-      function validateDate() {
-        const inputDate = $("#selectedDate").datepicker("getDate");
+						// Add 'clicked' class to the clicked button
+						button.classList.add("clicked");
+					});
+				});
+			});
+			function validateDate() {
+				const inputDate = $("#selectedDate").datepicker("getDate");
 
-        // Check if selected date is not null
-        if (inputDate !== null) {
-          alert("Date is valid!");
-        } else {
-          alert(
-            "Please select a valid date within the next 7 days (excluding weekends)."
-          );
-        }
-      }
-      function validateTime() {
-        const selectedTime = $("#selectedTime").val();
+				// Check if selected date is not null
+				if (inputDate !== null) {
+					alert("Date is valid!");
+				} else {
+					alert(
+						"Please select a valid date within the next 7 days (excluding weekends)."
+					);
+				}
+			}
+			function validateTime() {
+				const selectedTime = $("#selectedTime").val();
 
-        // Check if selected time is not empty
-        if (selectedTime !== "") {
-          alert("Time is valid!");
-        } else {
-          alert(
-            "Please select a valid time between 7:00 and 17:00 with 30-minute intervals."
-          );
-        }
-      }
-    </script>
-    <script>
-      function deleteFile(fileId) {
-        // Remove the button and span with the same ID
-        $("#" + fileId).remove();
-        $("#span-" + fileId).remove();
-        $("#br-" + fileId).remove();
-      }
-      var srcContent;
-      var fileName;
-      var fileCount = 1;
+				// Check if selected time is not empty
+				if (selectedTime !== "") {
+					alert("Time is valid!");
+				} else {
+					alert(
+						"Please select a valid time between 7:00 and 17:00 with 30-minute intervals."
+					);
+				}
+			}
+		</script>
+		<script>
+			function deleteFile(fileId) {
+				// Remove the button and span with the same ID
+				$("#" + fileId).remove();
+				$("#span-" + fileId).remove();
+				$("#br-" + fileId).remove();
+			}
+			var srcContent;
+			var fileName;
+			var fileCount = 1;
 
-      function readURL(input) {
-        if (input.files && input.files[0]) {
-          var reader = new FileReader();
-          reader.onload = function (e) {
-            srcContent = e.target.result;
-          };
-          fileName = input.files[0].name;
-          reader.readAsDataURL(input.files[0]);
-        }
-      }
+			function readURL(input) {
+				if (input.files && input.files[0]) {
+					var reader = new FileReader();
+					reader.onload = function (e) {
+						srcContent = e.target.result;
+					};
+					fileName = input.files[0].name;
+					reader.readAsDataURL(input.files[0]);
+				}
+			}
 
-      $(document).ready(function () {
-        $("#inputFile").change(function () {
-          if (this.files[0].name !== "") {
-            readURL(this);
-          }
-        });
+			$(document).ready(function () {
+				$("#inputFile").change(function () {
+					if (this.files[0].name !== "") {
+						readURL(this);
+					}
+				});
 
-        $("#btnPrvw").click(function () {
-          let htmlIframe =
-            '<iframe src="' + srcContent + '" frameborder="0"></iframe>';
-          $(".btn-upload").html(htmlIframe);
-          $("#content-upload").remove();
-          $("#icon-upload").remove();
-          let htmlIconDelete = "";
-          let htmlFileName =
-            '<button onclick="deleteFile(id)" class="delete-file" id="delete-file' +
-            fileCount +
-            '"><i class="fa-regular fa-circle-xmark"></i></button>' +
-            "<span id='span-delete-file" +
-            fileCount +
-            "'>" +
-            " " +
-            fileName +
-            "</span> <br id='br-delete-file" +
-            fileCount +
-            "'/>";
+				$("#btnPrvw").click(function () {
+					let htmlIframe = `<iframe src="${srcContent}" frameborder="0"></iframe>`;
+					$(".btn-upload").html(htmlIframe);
+					$("#content-upload").remove();
+					$("#icon-upload").remove();
+					let htmlIconDelete = "";
+					let htmlFileName = `
+						<button onclick="deleteFile(${fileCount})" class="delete-file" id="delete-file${fileCount}">
+							<i class="fa-regular fa-circle-xmark"></i>
+						</button>
+						<span id='span-delete-file${fileCount}'>${fileName}</span>
+						<br id='br-delete-file${fileCount}'/>
+					`;
 
-          console.log(htmlFileName);
-          $(htmlFileName).appendTo("div.list-files");
-          fileCount++;
-        });
-      });
-    </script>
-    <script></script>
+					console.log(htmlFileName);
+					$(htmlFileName).appendTo("div.list-files");
+					fileCount++;
+				});
+			});
+		</script>
 
-    <script
-      src="https://kit.fontawesome.com/92606ce77f.js"
-      crossorigin="anonymous"
-    ></script>
+		<script
+			src="https://kit.fontawesome.com/92606ce77f.js"
+			crossorigin="anonymous"
+		></script>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://code.jquery.com/jquery-3.7.1.js"
-      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js"></script>
-    <script src="js/user_service.js"></script>
-    <script src="js/user_header.js"></script>
-  </body>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://code.jquery.com/jquery-3.7.1.js"
+			integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+			crossorigin="anonymous"
+		></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js"></script>
+		<script src="js/user_service.js"></script>
+		<script src="js/user_header.js"></script>
+	</body>
 </html>
