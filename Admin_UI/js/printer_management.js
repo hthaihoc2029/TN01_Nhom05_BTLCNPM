@@ -1,3 +1,4 @@
+let currPage;
 /*
 This function is to get printer data from the server
 */
@@ -5,7 +6,12 @@ async function getPrinterInfo(){
     // implement
     let tmp = await fetch('http://localhost:3001/printers');
     let res = await tmp.json();
-    return res
+    let condition = $('#search_bar').val().toLowerCase()
+    let mask = await Promise.all(await res.map(async function(data){
+        return data.Model.toLowerCase().includes(condition)||data.ID.toLowerCase().includes(condition)
+    }));
+    // console.log(res.filter((item, i) => mask[i]))
+    return res.filter((item, i) => mask[i])
 }
 
 /*
@@ -13,7 +19,16 @@ this play general
 */
 async function displayPrinterInfo(begin,end){
     let printerInfo = await getPrinterInfo()
-    for (let printer=0;printer<printerInfo.length;printer++){
+    begin = parseInt(begin);
+    end = parseInt(end);
+    if (begin<0) begin=0;
+    if (end<=0) end=6;
+    if (begin == printerInfo.length) begin = printerInfo.length -6;
+    else if (begin > printerInfo.length) begin = printerInfo.length - printerInfo.length%6;
+    end = Math.min(end,printerInfo.length);
+    $("tbody").html('')
+    if (printerInfo.length == 0) return 1;
+    for (let printer=begin;printer<end;printer++){
         let row = `
             <tr id="row${printer}">
             <td scope="col pt-0" class="checkSingle">
@@ -57,59 +72,56 @@ async function displayPrinterInfo(begin,end){
             $(rowid).css('color','#B2BEC3')
         }
     }
+    $('#pageNumber').val(parseInt(begin/6)+1)
+    return parseInt(begin/6)+1
 }
-function toggleStatus(id){
+async function toggleStatus(id){
     fetch(`http://localhost:3001/printers/${id}/status`,{method:"PUT"})
     .then(res=>res.json())
-    .then(data => {
+    .then(async data => {
         showToast('successToast',"Thay đổi trạng thái thành công")
         $('tbody').html('')
-        displayPrinterInfo(0,10)
+        currPage=await displayPrinterInfo(currPage*6-6,currPage*6)
     })
     .catch(err => {
         showToast('failToast',"Thay đổi trạng thái thất bại")
     })
 
 }
-function deletePrinter(id){
+async function deletePrinter(id){
     $.ajax({
         url:`http://localhost:3001/printers/${id}`,
         type:'DELETE',
-        success: function(msg){
+        success: async function(msg){
             console.log(msg)
             if (msg.message == "Printer deleted successfully"){
                 showToast('successToast',"Máy in đã được xóa")
                 $('tbody').html('')
-                displayPrinterInfo(0,10)
+                currPage=await displayPrinterInfo(currPage*6-6,currPage*6)
             } else {
                 console.log(msg)
                 showToast('failToast',"Xóa máy in không thành công")
             }
         },
         error: function(){
-            showToast('failToast',"Xóa máy in không thành công")
+            showToast('failToast',"Xóa máy in không thành công");
         }   
     });
 }
-$(document).ready(function() {
+$(document).ready(async function() {
     $('#menu').html(getMenuContent())
     $('#account_bar').html(getAccountBarContent())
     $('#printer_management_button').css("background-color","#C8C2F2")
     $('#logo').click(function(){
         window.location.href = "home_admin.html"
     })
-    
-    displayPrinterInfo(0,10)
-    $('.delPrinterBtn').click(function(){
-        console.log(1)
-    })
+    currPage=await displayPrinterInfo(0,6)
     $('#checkAll').click(function(){
         $('.checkSingle>input').not(this).prop('checked', this.checked)
     })
 
     $(".checkSingle>input").click(function () {
         if ($('.checkSingle>input:checked').length == $('.checkSingle>input').length){
-            console.log()
             $('#checkAll').prop('checked',true);
         } else{
             $('#checkAll').prop('checked',false);
@@ -159,13 +171,13 @@ $(document).ready(function() {
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
-            success: function(msg){
+            success: async function(msg){
                 console.log(msg);
                 if (msg.message == "Printer added successfully"){
                     showToast('successToast',"Thêm máy in thành công")
                     $('tbody').html('')
                     $('.cancel-form').click()
-                    displayPrinterInfo(0,10)
+                    currPage=await displayPrinterInfo(0,6)
                 } else {
                     showToast('failToast',"Thêm máy in thấy bại")
                 }
@@ -176,4 +188,22 @@ $(document).ready(function() {
         })
     }
     })
+    $('#nextPage').click(async function(){
+        currPage = await displayPrinterInfo(currPage*6,currPage*6+6);
+    })
+    $('#previousPage').click(async function(){
+        currPage = await displayPrinterInfo(currPage*6 -12, currPage*6-6);
+    })
+    $('#gotoPage').click(async function(){
+        let pagenumber = $('#pageNumber').val();
+        currPage = await displayPrinterInfo(pagenumber*6-6,pagenumber*6);
+    })
+    $('#pageNumber').keydown(function(e){
+        if (e.which == 13){
+            $('#gotoPage').click();
+        }
+    });
+    $('#search_bar').on('input',async function(){
+        currPage = await displayPrinterInfo(0,6);
+    });
 });

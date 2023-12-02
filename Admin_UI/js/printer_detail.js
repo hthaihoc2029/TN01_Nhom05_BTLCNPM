@@ -46,7 +46,8 @@ async function getPrinterHistory(begin,end,printerID){
     $('.totalPrint').html(res.length);
     $('.start-day').html(`(tính từ ${dateProcess(res[res.length-1].ThoiGian)})`);
     $('tbody').html('');
-    if (begin > res.length) begin = res.length - res.length%6;
+    if (begin == res.length) begin = res.length -6;
+    else if (begin > res.length) begin = res.length - res.length%6;
     end = Math.min(end,res.length);
     for (var i=begin;i<end;i++){
         let data = res[i];
