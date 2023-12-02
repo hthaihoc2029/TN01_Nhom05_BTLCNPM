@@ -1,5 +1,5 @@
-test*
-test/
+
 .history/
 backend/node_modules/
 backend/config/config.json
+log.txt
