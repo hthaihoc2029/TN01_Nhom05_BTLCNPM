@@ -139,6 +139,7 @@ CREATE TABLE QuanLyTinNhan (
 	CREATE PROCEDURE GetPrintingHistory(IN PrinterID VARCHAR(16))
 	BEGIN
 		SELECT 
+			nd.ID AS IDNguoiDung,
 			nd.Ten AS NguoiDung,
 			li.ThoiGian,
 			tl.Ten AS TenTaiLieu,
@@ -151,7 +152,8 @@ CREATE TABLE QuanLyTinNhan (
 			JOIN TaiLieu tl ON tl.ID_LuotIn = li.ID
 			JOIN NguoiDung nd ON ia.ID_NguoiDung = nd.ID
 		WHERE 
-			ia.ID_MayIn = PrinterID;
+			ia.ID_MayIn = PrinterID
+        ORDER BY li.ThoiGian DESC;
 	END //
 
 	DELIMITER ;
@@ -308,6 +310,17 @@ CALL UserPrintingHistory()
 	DELIMITER ;
 
 	-- CALL PrintedDocument('ND0003');
+DELIMITER //
+CREATE TRIGGER deletePrinter BEFORE DELETE ON mayin
+FOR EACH ROW
+BEGIN
+	IF OLD.TinhTrang = 'Working' THEN
+		SIGNAL SQLSTATE '45000';
+	END IF;
+END;
+//
+DELIMITER ;
+
 DELIMITER //
 CREATE TRIGGER generateIDPRINTER BEFORE INSERT ON mayin
 FOR EACH ROW

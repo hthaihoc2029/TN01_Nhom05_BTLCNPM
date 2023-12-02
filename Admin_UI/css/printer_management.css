@@ -149,3 +149,15 @@ tr{
     width: 70%;
     aspect-ratio: 1 / 1;
 }
+#upload-image>button:hover{
+    transform: scale(1.1);
+}
+#pageNumber{
+    width: 10%;
+}
+tr{
+    font-size: 14px;
+}
+.pagination-row{
+    font-size: 10px;
+}
