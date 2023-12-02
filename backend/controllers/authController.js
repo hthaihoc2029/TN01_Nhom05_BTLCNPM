@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 
 const generateAccessToken = (user) => {
   const accessToken = jwt.sign({ userId: user.ID }, jwtConfig.secret, {
-    expiresIn: "20s", // 20s for testing, 15m for production
+    expiresIn: "24h", // 20s for testing, 15m for production
   });
   const refreshToken = jwt.sign({ userId: user.ID }, jwtConfig.refreshSecret, {
     expiresIn: "24h",
@@ -44,7 +44,15 @@ const loginController = async (req, res) => {
       });
 
       // Trả về accessToken trong phản hồi JSON
-      res.json({ accessToken: tokens.accessToken });
+      res.json({ 
+        accessToken: tokens.accessToken,
+        user:{
+          ID:user.ID,
+          Ten:user.Ten,
+          TenDangNhap: user.TenDangNhap,
+          VaiTro: user.VaiTro
+        }
+      });
     } else {
       res.status(401).send("Username or password incorrect");
     }
