@@ -18,7 +18,7 @@ async function login(username, password) {
 				status["user"] = res.user;
 			},
 			error: async function (err) {
-				console.log(err);
+				// console.log(err);
 			},
 		});
 	} catch (err) {}
@@ -27,13 +27,16 @@ async function login(username, password) {
 
 $(document).ready(async function () {
 	if (Cookies.get("accessToken")) window.location.href = "user_home.html";
-	$("#login").click(async function (e) {
+
+	// $("#login").click(async function (e) {
+	$("form").submit(async function (e) {
+		e.preventDefault();
 		let username = $("#username").val();
 		let password = $("#password").val();
 		username = await preprocessedEmail(username);
 		let loginStatus = await login(username, password);
 		if (loginStatus["success"]) {
-			console.log(loginStatus);
+			// console.log(loginStatus);
 			Cookies.set("accessToken", loginStatus["accessToken"]);
 			for (key in loginStatus["user"]) {
 				Cookies.set(key, loginStatus["user"][key]);
@@ -41,24 +44,25 @@ $(document).ready(async function () {
 			window.location.href = "user_home.html";
 		}
 	});
-	$(document).keydown(function (e) {
-		if (e.which == 13) {
-			$("#login").click();
-		}
-	});
+	// $(document).keydown(function (e) {
+	// 	if (e.which == 13) {
+	// 		$("#login").click();
+	// 	}
+	// });
 });
-const $password = document.querySelector("#passid");
-const $toggler = document.querySelector("i");
 
-const showHidePassword = () => {
-	if ($password.getAttribute("type") === "password") {
-		$password.setAttribute("type", "text");
-	} else {
-		$password.setAttribute("type", "password");
-	}
+// const $password = document.querySelector("#passid");
+// const $toggler = document.querySelector("i");
 
-	$toggler.classList.toggle("fa-eye");
-	$toggler.classList.toggle("fa-eye-slash");
-};
+// const showHidePassword = () => {
+// 	if ($password.getAttribute("type") === "password") {
+// 		$password.setAttribute("type", "text");
+// 	} else {
+// 		$password.setAttribute("type", "password");
+// 	}
 
-$toggler.addEventListener("click", showHidePassword);
+// 	$toggler.classList.toggle("fa-eye");
+// 	$toggler.classList.toggle("fa-eye-slash");
+// };
+
+// $toggler.addEventListener("click", showHidePassword);

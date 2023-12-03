@@ -44,7 +44,7 @@
 				<div class="container">
 					<div class="row gx-1 justify-content-between">
 						<div class="col-md-6 preview">
-							<div class="btn-upload">
+							<div class="btn-upload" id="drop_zone">
 								<h3 id="content-upload">Tải file lên</h3>
 								<br />
 								<i
@@ -76,104 +76,13 @@
 							</div>
 
 							<div class="print-function" id="infoDisplay"></div>
+							<!-- <div class="list-files" style="display: none"></div> -->
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-		<script>
-			document.addEventListener("DOMContentLoaded", function () {
-				// Get all buttons with class 'btn-select'
-				var buttons = document.querySelectorAll(".btn-select");
-
-				// Add click event listener to each button
-				buttons.forEach(function (button) {
-					button.addEventListener("click", function () {
-						// Remove 'clicked' class from all buttons
-						buttons.forEach(function (btn) {
-							btn.classList.remove("clicked");
-						});
-
-						// Add 'clicked' class to the clicked button
-						button.classList.add("clicked");
-					});
-				});
-			});
-			function validateDate() {
-				const inputDate = $("#selectedDate").datepicker("getDate");
-
-				// Check if selected date is not null
-				if (inputDate !== null) {
-					alert("Date is valid!");
-				} else {
-					alert(
-						"Please select a valid date within the next 7 days (excluding weekends)."
-					);
-				}
-			}
-			function validateTime() {
-				const selectedTime = $("#selectedTime").val();
-
-				// Check if selected time is not empty
-				if (selectedTime !== "") {
-					alert("Time is valid!");
-				} else {
-					alert(
-						"Please select a valid time between 7:00 and 17:00 with 30-minute intervals."
-					);
-				}
-			}
-		</script>
-		<script>
-			function deleteFile(fileId) {
-				// Remove the button and span with the same ID
-				$("#" + fileId).remove();
-				$("#span-" + fileId).remove();
-				$("#br-" + fileId).remove();
-			}
-			var srcContent;
-			var fileName;
-			var fileCount = 1;
-
-			function readURL(input) {
-				if (input.files && input.files[0]) {
-					var reader = new FileReader();
-					reader.onload = function (e) {
-						srcContent = e.target.result;
-					};
-					fileName = input.files[0].name;
-					reader.readAsDataURL(input.files[0]);
-				}
-			}
-
-			$(document).ready(function () {
-				$("#inputFile").change(function () {
-					if (this.files[0].name !== "") {
-						readURL(this);
-					}
-				});
-
-				$("#btnPrvw").click(function () {
-					let htmlIframe = `<iframe src="${srcContent}" frameborder="0"></iframe>`;
-					$(".btn-upload").html(htmlIframe);
-					$("#content-upload").remove();
-					$("#icon-upload").remove();
-					let htmlIconDelete = "";
-					let htmlFileName = `
-						<button onclick="deleteFile(${fileCount})" class="delete-file" id="delete-file${fileCount}">
-							<i class="fa-regular fa-circle-xmark"></i>
-						</button>
-						<span id='span-delete-file${fileCount}'>${fileName}</span>
-						<br id='br-delete-file${fileCount}'/>
-					`;
-
-					console.log(htmlFileName);
-					$(htmlFileName).appendTo("div.list-files");
-					fileCount++;
-				});
-			});
-		</script>
 
 		<script
 			src="https://kit.fontawesome.com/92606ce77f.js"
@@ -190,6 +99,7 @@
 			integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
 			crossorigin="anonymous"
 		></script>
+		<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js"></script>
 		<script src="js/user_service.js"></script>

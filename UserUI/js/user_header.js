@@ -1,4 +1,4 @@
-let getMenuContent = function () {
+function getMenuContent() {
 	return (
 		`<div class="container-fluid">
 			<nav class="navbar navbar-light bg-light">
@@ -104,18 +104,19 @@ let getMenuContent = function () {
 			</nav>
 			</div>`
 	);
-};
+}
 
-let getUsername = () => {
-	return "hoc.huynhthai";
-};
+function getUsername() {
+	return Cookies.get("Ten");
+}
 
-let getMSSV = () => {
-	return "2113443";
-};
-let getAccountBar = function () {
-	return (
-		` <div class="login_acc">
+function getMSSV() {
+	return Cookies.get("ID");
+}
+
+function getAccountBar() {
+	return `
+		<div class="login_acc">
 			<div class="img-message">
 				<button class="btn-message">
 				<img class="img-msg"
@@ -152,17 +153,24 @@ let getAccountBar = function () {
 				</button>
 			</div>
 
+			<div class="home-username">
+				${getUsername()}|
+			</div>
 
-			<div class="home-username">` +
-		getUsername() +
-		` |</div>
-
-			<div class="home-mssv">` +
-		getMSSV() +
-		`</div>
-			<button class="logout">
+			<div class="home-mssv">
+				${getMSSV()}
+			</div>
+			<button class="logout" onclick="logout()">
 				<i class="fa-solid fa-right-from-bracket"></i>
 			</button>
- </div>`
-	);
-};
+		</div>`;
+}
+
+function logout() {
+	Cookies.remove("accessToken");
+	Cookies.remove("Ten");
+	Cookies.remove("TenDangNhap");
+	Cookies.remove("ID");
+	Cookies.remove("VaiTro");
+	window.location.href = "user_login.html";
+}
