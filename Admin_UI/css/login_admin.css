@@ -1,61 +1,66 @@
 #spss {
-    background: linear-gradient(86deg, #7A34D4 0.4%, rgba(15, 150, 208, 0.80) 93.72%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-family: Nunito;
-    font-size: 50px;
-    font-style: normal;
-    font-weight: 800;
-    line-height: normal;
-    letter-spacing: 5px;
-    }
-#logo{
-    width: 78px;
-    height: 78px;
-    flex-shrink: 0;
+	background: linear-gradient(
+		86deg,
+		#7a34d4 0.4%,
+		rgba(15, 150, 208, 0.8) 93.72%
+	);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	font-family: Nunito;
+	font-size: 50px;
+	font-style: normal;
+	font-weight: 800;
+	line-height: normal;
+	letter-spacing: 5px;
 }
-#login_title{
-    padding-left: 12;
-    color: var(--black-25, #444B59);
-    font-family: Overpass;
-    font-size: 26px;
-    font-style: normal;
-    font-weight: 800;
-    line-height: normal;
+#logo {
+	/* width: 100%;
+	height: 100%; */
+	flex-shrink: 0;
 }
-.btn{
-    color: white;
-    font-family: Nunito;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 800;
-    line-height: normal;
-    background: #4834D4;
-    box-shadow: 4px 8px 12px 0px rgba(78, 99, 141, 0.06), 0px 4px 12px 0px rgba(200, 211, 249, 0.60) inset;
+#login_title {
+	padding-left: 12;
+	color: var(--black-25, #444b59);
+	font-family: Overpass;
+	font-size: 26px;
+	font-style: normal;
+	font-weight: 800;
+	line-height: normal;
 }
-
-.button_label{
-    color: #444B59;
-    font-family: Nunito;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    text-decoration-line: underline;
+.btn {
+	color: white;
+	font-family: Nunito;
+	font-size: 20px;
+	font-style: normal;
+	font-weight: 800;
+	line-height: normal;
+	background: #4834d4;
+	box-shadow: 4px 8px 12px 0px rgba(78, 99, 141, 0.06),
+		0px 4px 12px 0px rgba(200, 211, 249, 0.6) inset;
 }
 
-.form-label{
-    font-family: Nunito;
-    color: #444B59;
+.button_label {
+	color: #444b59;
+	font-family: Nunito;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+	text-decoration-line: underline;
 }
 
-#forget_password{
-    color: #4834D4;
-    font-family: Nunito;
-    text-decoration: none;
+.form-label {
+	font-family: Nunito;
+	font-weight: 600;
+	color: #444b59;
 }
 
-.form-control{
-    border-color: #4834D4;
+#forget_password {
+	color: #4834d4;
+	font-family: Nunito;
+	text-decoration: none;
 }
-    
+
+.form-control {
+	border-color: #4834d4;
+}

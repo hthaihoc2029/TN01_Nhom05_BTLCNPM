@@ -6,7 +6,7 @@ CREATE TABLE NguoiDung (
 	STT INT NOT NULL DEFAULT 0,
     ID VARCHAR(16) PRIMARY KEY,
     Ten VARCHAR(255) NOT NULL,
-    TenDangNhap VARCHAR(255) NOT NULL,
+    TenDangNhap VARCHAR(255) NOT NULL UNIQUE,
     MatKhau VARCHAR(255) NOT NULL,
     SoLuongGiay INT,
     VaiTro VARCHAR(255) NOT NULL,
@@ -139,6 +139,7 @@ CREATE TABLE QuanLyTinNhan (
 	CREATE PROCEDURE GetPrintingHistory(IN PrinterID VARCHAR(16))
 	BEGIN
 		SELECT 
+			nd.ID AS IDNguoiDung,
 			nd.Ten AS NguoiDung,
 			li.ThoiGian,
 			tl.Ten AS TenTaiLieu,
@@ -151,7 +152,8 @@ CREATE TABLE QuanLyTinNhan (
 			JOIN TaiLieu tl ON tl.ID_LuotIn = li.ID
 			JOIN NguoiDung nd ON ia.ID_NguoiDung = nd.ID
 		WHERE 
-			ia.ID_MayIn = PrinterID;
+			ia.ID_MayIn = PrinterID
+        ORDER BY li.ThoiGian DESC;
 	END //
 
 	DELIMITER ;
@@ -309,6 +311,17 @@ CALL UserPrintingHistory()
 
 	-- CALL PrintedDocument('ND0003');
 DELIMITER //
+CREATE TRIGGER deletePrinter BEFORE DELETE ON mayin
+FOR EACH ROW
+BEGIN
+	IF OLD.TinhTrang = 'Working' THEN
+		SIGNAL SQLSTATE '45000';
+	END IF;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
 CREATE TRIGGER generateIDPRINTER BEFORE INSERT ON mayin
 FOR EACH ROW
 BEGIN
@@ -374,7 +387,7 @@ DELIMITER ;
 	('Mọi người', 'everyone','$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', 00, 'System');
 	
 	INSERT INTO NguoiDung ( Ten, TenDangNhap, MatKhau, SoLuongGiay, VaiTro) VALUES
-	('Nguyễn Văn A', 'A.Nguyen', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',80, 'Student'),
+	('Nguyễn Văn A', 'A.Nguyen', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi',80, 'Student'),
 	('Trần Thị B', 'B.Tran', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',120, 'Lecturer'),
 	('Lê Văn C', 'C.Le', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',90, 'Student'),
 	('Phạm Thị D', 'D.Pham', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',110, 'Lecturer'),
