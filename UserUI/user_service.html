@@ -32,6 +32,7 @@
 			href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css"
 		/>
 
+		<link rel="stylesheet" href="./css/user_header.css" />
 		<link rel="stylesheet" href="./css/user_service.css" />
 		<link rel="stylesheet" href="./css/user_selectprinter.css" />
 	</head>
@@ -43,23 +44,39 @@
 			<div class="body_service">
 				<div class="container">
 					<div class="row gx-1 justify-content-between">
-						<div class="col-md-6 preview">
+						<div
+							class="col-md-6 preview d-flex align-items-center flex-column"
+						>
 							<div class="btn-upload" id="drop_zone">
-								<h3 id="content-upload">Tải file lên</h3>
-								<br />
-								<i
-									id="icon-upload"
-									class="fa-solid fa-upload fa-2xl"
-								></i>
-							</div>
-							<div>
-								<input name="file" type="file" id="inputFile" />
+								<canvas
+									id="pdf-preview"
+									width="1000"
+									height="1200"
+									class="d-none"
+								></canvas>
+								<div
+									class="d-flex flex-column align-items-center p-2"
+									id="upload-button"
+								>
+									<h3 id="content-upload">Tải file lên</h3>
+									<br />
+									<i
+										id="icon-upload"
+										class="fa-solid fa-upload fa-2xl"
+										style="height: 24px"
+									></i>
+								</div>
 								<input
-									type="button"
-									value="Preview"
-									id="btnPrvw"
+									name="file"
+									type="file"
+									id="inputFile"
+									style="display: none"
 								/>
 							</div>
+							<div
+								class="text-center"
+								id="preview-file-name"
+							></div>
 						</div>
 
 						<div class="col-md-6 register">
@@ -76,7 +93,6 @@
 							</div>
 
 							<div class="print-function" id="infoDisplay"></div>
-							<!-- <div class="list-files" style="display: none"></div> -->
 						</div>
 					</div>
 				</div>
@@ -102,6 +118,21 @@
 		<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js"></script>
+		<!-- <script
+			src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"
+			integrity="sha512-Z8CqofpIcnJN80feS2uccz+pXWgZzeKxDsDNMD/dJ6997/LSRY+W4NmEt9acwR+Gt9OHN0kkI1CTianCwoqcjQ=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		></script> -->
+		<!-- <script type="module">
+			import pdfjsDist from "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.269/+esm";
+			pdfjsLib.GlobalWorkerOptions.workerSrc =
+				"https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.269/build/pdf.worker.mjs";
+		</script> -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.228/pdf.min.js"></script>
+		<!-- <script src="//mozilla.github.io/pdf.js/build/pdf.mjs" type="module"></script> -->
+
+		<script src="js/utils.js"></script>
 		<script src="js/user_service.js"></script>
 		<script src="js/user_header.js"></script>
 	</body>
