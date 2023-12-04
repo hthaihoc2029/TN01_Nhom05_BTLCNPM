@@ -5,6 +5,19 @@ function deleteFile(fileName) {
 	$(`#br-delete-file${fileIds[fileName]}`).remove();
 	delete fileList[fileName];
 	delete printSettings[fileName];
+	URL.revokeObjectURL(fileUrls[fileName]);
+
+	if (fileName === fileNameFocus) unpreviewFile();
+}
+
+function unpreviewFile() {
+	$("#upload-button").removeClass("d-none");
+	$("#upload-button").addClass("d-flex");
+	$("#preview-file-name").text("");
+	$("#pdf-preview").removeClass("d-block");
+	$("#pdf-preview").addClass("d-none");
+
+	applyFocusFile("");
 }
 
 const SUPPORTED_EXTENSIONS = ["pdf"];
@@ -18,10 +31,49 @@ var userID;
 var selectPrinterID;
 var files = {};
 var fileIds = {};
+var fileUrls = {};
 
 var tabFocus = "btn1";
 var fileFocus = 0;
 var fileNameFocus = "";
+
+var _CANVAS;
+
+// load the PDF
+async function showPDF(url) {
+	try {
+		let pdf_doc = await pdfjsLib.getDocument({ url }).promise;
+		showPage(pdf_doc, 1);
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+// show page of PDF
+async function showPage(doc, page_no) {
+	let page = await doc.getPage(page_no);
+	// set the scale of viewport
+	let scale = Math.min(
+		_CANVAS.width / page.getViewport(1).width,
+		_CANVAS.height / page.getViewport(1).height
+	);
+
+	var viewport = page.getViewport(scale);
+	_CANVAS.width = viewport.width;
+	_CANVAS.style.width = "80%";
+	_CANVAS.height = viewport.height;
+	_CANVAS.style.height = "90%";
+
+	var renderContext = {
+		canvasContext: document.querySelector("#pdf-preview").getContext("2d"),
+		viewport,
+	};
+
+	// render the page contents in the canvas
+	await page.render(renderContext).promise;
+	$("#pdf-preview").removeClass("d-none");
+	$("#pdf-preview").addClass("d-block");
+}
 
 function readURL(file) {
 	var reader = new FileReader();
@@ -30,19 +82,24 @@ function readURL(file) {
 		srcContents[fileCount] = e.target.result;
 		files[name] = e.target.result;
 		printSettings[name] = {};
+		var url = URL.createObjectURL(file);
+		fileUrls[name] = url;
 		previewFile(name);
 	};
 	reader.readAsDataURL(file);
 }
 
 function previewFile(fileName) {
-	$("#content-upload").remove();
-	$("#icon-upload").remove();
+	// $("#content-upload").remove();
+	// $("#icon-upload").remove();
 	let htmlIframe = `<iframe src="${files[fileName]}" frameborder="0"></iframe>`;
-	$(".btn-upload").html(htmlIframe);
+	// let htmlIframe = `<object data="${files[fileName]}" type="application/pdf"></object>`;
+	// $(".btn-upload").html(htmlIframe);
 
-	$(".file-print-div").removeClass("file-print_focus");
-	$(`#file-print${fileIds[fileName]}`).addClass("file-print_focus");
+	showPDF(fileUrls[fileName]);
+	$("#upload-button").removeClass("d-flex");
+	$("#upload-button").addClass("d-none");
+	$("#preview-file-name").text(fileName);
 
 	applyFocusFile(fileName);
 	applyFocusTab();
@@ -60,7 +117,7 @@ async function uploadFile() {
 		readURL(this.files[0]);
 		let htmlFileName = `
 		<div id="file-print${fileCount}" class="file-print-div file-print_focus">
-			<button onclick="deleteFile(${name})" class="delete-file" id="delete-file${fileCount}">
+			<button onclick="deleteFile('${name}')" class="delete-file" id="delete-file${fileCount}">
 				<i class="fa-regular fa-circle-xmark"></i>
 			</button>
 			<span id='span-file${fileCount}' onclick="previewFile('${name}')">${name}</span>
@@ -70,6 +127,7 @@ async function uploadFile() {
 		fileIds[name] = fileCount;
 		fileList[name] = htmlFileName;
 		fileCount++;
+		document.querySelector("#inputFile").value = "";
 		$("#btn1").click();
 	}
 }
@@ -94,7 +152,7 @@ function dropHandler(e) {
 		readURL(files[0]);
 		let htmlFileName = `
 		<div id="file-print${fileCount}" class="file-print-div file-print_focus">
-			<button onclick="deleteFile(${name})" class="delete-file" id="delete-file${fileCount}">
+			<button onclick="deleteFile('${name}')" class="delete-file" id="delete-file${fileCount}">
 				<i class="fa-regular fa-circle-xmark"></i>
 			</button>
 			<span id='span-file${fileCount}' onclick="previewFile('${name}')">${name}</span>
@@ -108,8 +166,10 @@ function dropHandler(e) {
 	}
 }
 
-$(document).ready(function () {
-	$("#headerbar").html(getMenuContent());
+$(document).ready(async function () {
+	_CANVAS = document.querySelector("#pdf-preview");
+
+	$("#headerbar").html(await getMenuContent());
 
 	$("#inputFile").change(uploadFile);
 
@@ -121,6 +181,10 @@ $(document).ready(function () {
 
 	$("#drop_zone").on("drop", dropHandler);
 
+	$("#upload-button").on("click", () => {
+		$("#inputFile").click();
+	});
+
 	$("#btn1").click(button1ClickHandler);
 	$("#btn2").click(button2ClickHandler);
 	$("#btn3").click(button3ClickHandler);
@@ -130,6 +194,8 @@ $(document).ready(function () {
 function button1ClickHandler() {
 	displayInfo(getBtn1Content());
 	for (var name in fileList) $(fileList[name]).appendTo("div.list-files");
+
+	applyFocusFile(fileNameFocus);
 
 	tabFocus = "btn1";
 	applyFocusTab();
@@ -264,19 +330,57 @@ function getBtn1Content() {
 
 async function getBtn2Content() {
 	let printers;
-	await $.ajax("http://localhost:3001/printers", {
-		method: "GET",
-		beforeSend: (req) => {
-			req.setRequestHeader(
-				"Authorization",
-				"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJORDAwMDEiLCJpYXQiOjE3MDE1MzA3NjYsImV4cCI6MTcwMTYwMjc2Nn0.UTVhl5eeZFNkj1xs4DqCTczyPqglKbtv45i8L295FYg"
-			);
-		},
-		success: (data) =>
-			(printers = data.filter((value) => {
-				return value.TinhTrang === "Working";
-			})),
-	});
+	try {
+		await $.ajax("http://localhost:3001/printers", {
+			method: "GET",
+			beforeSend: (req) => {
+				req.setRequestHeader(
+					"Authorization",
+					`Bearer ${Cookies.get("accessToken")}`
+				);
+			},
+			success: (data) =>
+				(printers = data.filter((value) => {
+					return value.TinhTrang === "Working";
+				})),
+		});
+	} catch (err) {
+		await requestToken();
+		return getBtn2Content();
+	}
+
+	let text = printers
+		.map((printer) => {
+			return `
+				<tr>
+					<td class="btn-printerinfo">
+						<a href="">
+							<img src="./images/user_service/Rectangle 1253.png" width="32px" height="32px" alt="" />
+						</a>
+					</td>
+					<td><b>${printer.Model}</b></td>
+					<td>${printer.ID}</td>
+					<td>${printer.ViTri}</td>
+					<td>HOẠT ĐỘNG</td>
+					<td>
+						<button
+							type="button"
+							class="btn-select"
+							onclick="selectPrinter('${printer.ID}')" 
+							data-bs-toggle="modal"
+							data-bs-target="#modal"
+						>
+							<img src="./images/user_service/printer_select${
+								printer.ID ===
+								printSettings[fileNameFocus].printerID
+									? "ed.svg"
+									: ".svg"
+							}" />
+						</button>
+					</td>
+				</tr>`;
+		})
+		.join("");
 
 	return `
 		<div class="table-title">Máy in khả dụng</div>
@@ -297,50 +401,10 @@ async function getBtn2Content() {
 		<div class="table-content">
 			<table>
 				<tbody>
-					${printers.map((printer) => {
-						return `
-					<tr>
-						<td class="btn-printerinfo">
-							<a href="">
-								<img
-									src="./images/user_service/Rectangle 1253.png"
-									width="32px"
-									height="32px"
-									alt=""
-								/>
-							</a>
-						</td>
-						<td><b>${printer.Model}</b></td>
-						<td>${printer.ID}</td>
-						<td>${printer.ViTri}</td>
-						<td>HOẠT ĐỘNG</td>
-						<td>
-							<button type="button" class="btn-select ${
-								printer.ID === selectPrinterID ? "clicked" : ""
-							}" onclick="selectPrinter('${
-							printer.ID
-						}')" data-bs-toggle="modal" data-bs-target="#modal">
-								<svg xmlns="http://www.w3.org/2000/svg" width="111" height="32" viewBox="0 0 111 32" fill="none">
-									<path d="M0.533203 10.0449C0.533203 4.52208 5.01036 0.0449219 10.5332 0.0449219H100.056C105.579 0.0449219 110.056 4.52207 110.056 10.0449V21.9561C110.056 27.4789 105.579 31.9561 100.056 31.9561H10.5332C5.01035 31.9561 0.533203 27.4789 0.533203 21.9561V10.0449Z" fill="url(#paint0_linear_231_8842)" />
-									<defs>
-										<linearGradient id="paint0_linear_231_8842" x1="8.19712" y1="25.6081" x2="98.9465" y2="-4.91499" gradientUnits="userSpaceOnUse">
-											<stop offset="0.0388426" stop-color="#7A34D4" />
-											<stop offset="0.0739581" stop-color="#4739D4" stop-opacity="0.926042" />
-											<stop offset="0.0791664" stop-color="#5B4FE1" stop-opacity="0.920834" />
-											<stop offset="1" stop-color="#0F96D0" stop-opacity="0.8" />
-										</linearGradient>
-									</defs>
-									<text id="text-select" x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="20" fill="white" >
-										Chọn
-									</text>
-								</svg>
-							</button>
-						</td>
-					</tr>`;
-					})}
+					${text}
 				</tbody>
 			</table>
-
+		</div>
 
 <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -358,9 +422,7 @@ async function getBtn2Content() {
 			</div>
 		</div>
 	</div>
-</div>
-
-		</div>`;
+</div>`;
 }
 
 function confirmSelectPrinter() {
@@ -394,7 +456,7 @@ function getBtn3Content() {
 				Save
 			</button>
 		</form>
-		<button type="button" class="btn-select" onclick="confirmPrint()">
+		<button type="button" class="btn-select" onclick="validateSettings()">
 			<svg xmlns="http://www.w3.org/2000/svg" width="111" height="32" viewBox="0 0 111 32" fill="none">
 				<path d="M0.533203 10.0449C0.533203 4.52208 5.01036 0.0449219 10.5332 0.0449219H100.056C105.579 0.0449219 110.056 4.52207 110.056 10.0449V21.9561C110.056 27.4789 105.579 31.9561 100.056 31.9561H10.5332C5.01035 31.9561 0.533203 27.4789 0.533203 21.9561V10.0449Z" fill="url(#paint0_linear_231_8842)" />
 				<defs>
@@ -410,10 +472,27 @@ function getBtn3Content() {
 				</text>
 			</svg>
 		</button>
-	`;
+
+		
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="confirmModalLabel">Thông báo</h1>
+			</div>
+			<div class="modal-body">
+				Bạn có xác nhận muốn in tài liệu không?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+				<button type="button" class="btn btn-danger" onclick="confirmPrint()">Xác nhận</button>
+			</div>
+		</div>
+	</div>
+</div>`;
 }
 
-async function confirmPrint() {
+async function validateSettings() {
 	// Check if there are any file which haven't been fully configured
 	incompleteFiles = {};
 	for (const fileName in printSettings) {
@@ -462,6 +541,11 @@ async function confirmPrint() {
 		return;
 	}
 
+	// If all settings are valid, ask the user for confirmation
+	$("#confirmModal").modal("show");
+}
+
+async function confirmPrint() {
 	// Set timestamp for each print file
 	for (const fileName in printSettings)
 		printSettings[fileName].printTime =
@@ -470,6 +554,7 @@ async function confirmPrint() {
 	// Make a POST request for each file
 	for (const fileName in printSettings) {
 		let temp = {
+			userID: Cookies.get("ID"),
 			fileName,
 			filePath: fileName,
 			printDirection: printSettings[fileName].printDirection,
@@ -480,24 +565,32 @@ async function confirmPrint() {
 			printerID: printSettings[fileName].printerID,
 			printTime: printSettings[fileName].printTime,
 		};
-		await $.ajax("http://localhost:3001/printing", {
-			method: "POST",
-			contentType: "application/json",
-			beforeSend: function (request) {
-				request.setRequestHeader(
-					"Authorization",
-					`Bearer ${Cookies.get("accessToken")}`
-				);
-			},
-			data: JSON.stringify(temp),
-			success: (data) => {
-				console.log(data);
-			},
-			error: (err) => {
-				console.log(err);
-			},
-		});
+		try {
+			await $.ajax("http://localhost:3001/printing", {
+				method: "POST",
+				contentType: "application/json",
+				beforeSend: function (request) {
+					request.setRequestHeader(
+						"Authorization",
+						`Bearer ${Cookies.get("accessToken")}`
+					);
+				},
+				data: JSON.stringify(temp),
+				success: (data) => {
+					console.log(data);
+				},
+				error: (err) => {
+					console.log(err);
+				},
+			});
+		} catch (error) {
+			alert("Error");
+			location.reload();
+		}
 	}
+
+	localStorage.setItem("printSuccess", true);
+	location.href = "./user_home.html";
 }
 
 function savePrintSettings() {
