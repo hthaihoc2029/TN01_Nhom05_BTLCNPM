@@ -1,13 +1,13 @@
 let getUsername = () => {
-  return "hoc.huynhthai";
+	return "hoc.huynhthai";
 };
 
 let getMSSV = () => {
-  return "2113443";
+	return "2113443";
 };
 let getAccountBar = function () {
-  return (
-    `<div class="login_acc">
+	return (
+		`<div class="login_acc">
   <div class="img-message">
     <button class="btn-message">
       <svg
@@ -68,13 +68,15 @@ let getAccountBar = function () {
   </div>
 
   <div class="home-username">` +
-    getUsername() +
-    ` |</div>
+		getUsername() +
+		` |</div>
 
   <div class="home-mssv">2113443</div>
   <button class="logout">
     <i class="fa-solid fa-right-from-bracket"></i>
   </button>
 </div>`
-  );
+	);
 };
+
+function logout() {}
