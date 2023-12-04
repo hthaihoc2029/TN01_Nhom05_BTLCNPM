@@ -1,6 +1,11 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('nguoidung', {
+    STT: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    },
     ID: {
       type: DataTypes.STRING(16),
       allowNull: false,
@@ -12,7 +17,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     TenDangNhap: {
       type: DataTypes.STRING(255),
-      allowNull: false
+      allowNull: false,
+      unique: "TenDangNhap"
     },
     MatKhau: {
       type: DataTypes.STRING(255),
@@ -33,6 +39,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'nguoidung',
+    hasTrigger: true,
     timestamps: false,
     indexes: [
       {
@@ -41,6 +48,14 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "ID" },
+        ]
+      },
+      {
+        name: "TenDangNhap",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "TenDangNhap" },
         ]
       },
     ]

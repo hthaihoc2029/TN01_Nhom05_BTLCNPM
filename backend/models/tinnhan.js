@@ -1,6 +1,11 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('tinnhan', {
+    STT: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1
+    },
     ID: {
       type: DataTypes.STRING(16),
       allowNull: false,
@@ -33,6 +38,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'tinnhan',
+    hasTrigger: true,
     timestamps: false,
     indexes: [
       {

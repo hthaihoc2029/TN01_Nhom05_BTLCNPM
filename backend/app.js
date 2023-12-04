@@ -24,6 +24,9 @@ app.use("/printing",printingRouter);
 const authRouter = require('./routers/authRouters');
 app.use("/auth", authRouter);
 
+const adminRouter = require('./routers/adminRouters');
+app.use("/admin", adminRouter);
+
 
 const PORT = process.env.PORT || 3001;
 
