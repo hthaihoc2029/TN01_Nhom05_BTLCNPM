@@ -83,9 +83,9 @@
 								>
 							</div>
 							<div class="col-sm-6 text-sm-end">
-								<a href="#" id="forget_password"
-									>Quên mật khẩu?</a
-								>
+								<button type="button" id="forget_password">
+									Quên mật khẩu?
+								</button>
 							</div>
 						</div>
 						<div class="my-4">
@@ -176,7 +176,9 @@
 							></button>
 						</div>
 						<div class="row-flex d-flex">
-							<div class="rounded-circle w-auto p-2 cross">
+							<div
+								class="rounded-circle w-auto p-2 cross bg-danger"
+							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									width="26"
@@ -192,7 +194,7 @@
 								</svg>
 							</div>
 							<div class="ms-2">
-								<span class="Montserrat">Thất bại</span>
+								<span class="Montserrat fw-bold">Thất bại</span>
 								<br />
 								<span
 									class="Montserrat-500 toast-message"
@@ -215,6 +217,7 @@
 			crossorigin="anonymous"
 		></script>
 		<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+		<script src="js/ultil.js"></script>
 		<script src="js/login_admin.js"></script>
 	</body>
 </html>

@@ -4,7 +4,6 @@ async function login(e) {
 	let password = $("#password").val();
 	let remember = $("#remember").is(":checked");
 	try {
-		console.log(username, password);
 		await $.ajax("http://localhost:3001/admin/login", {
 			type: "POST",
 			contentType: "application/json",
@@ -22,10 +21,15 @@ async function login(e) {
 			error: function (err) {},
 		});
 	} catch (error) {
+		showToast("failToast", "Thông tin đăng nhập không chính xác");
 		console.log(error);
 	}
 }
 
 $(document).ready(function () {
 	$("form").submit(login);
+
+	$("#forget_password").click(() => {
+		showToast("failToast", "Hãy liên hệ với các quản trị viên khác");
+	});
 });
