@@ -17,11 +17,12 @@
 		/>
 		<link href="css/printer_management.css" rel="stylesheet" />
 		<link href="css/menu.css" rel="stylesheet" />
-		<title>Printer Management</title>
+		<link rel="shortcut icon" href="./image/icon.ico" type="image/x-icon" />
+		<title>Quản lý máy in</title>
 	</head>
 	<body>
 		<div class="container-fluid p-0" id="body">
-			<div class="row">
+			<div class="row m-0">
 				<div
 					class="col-sm-2 d-flex flex-column vh-100 align-items-center"
 					id="menu"
@@ -35,14 +36,14 @@
 								>Số lượng máy in</span
 							>
 							<br />
-							<span class="quantity">100</span>
+							<span class="quantity">0</span>
 						</div>
 						<div class="me-5 general_info ps-2" id="paper_number">
 							<span class="general_attribute"
 								>Số lượng giấy in</span
 							>
 							<br />
-							<span class="quantity">10000</span>
+							<span class="quantity">0</span>
 						</div>
 						<div
 							class="me-5 general_info ps-2"
@@ -50,15 +51,15 @@
 						>
 							<span class="general_attribute">Số lượt in</span>
 							<br />
-							<span class="quantity">100</span>
+							<span class="quantity">0</span>
 						</div>
 						<div class="me-5 general_info ps-2" id="queue">
 							<span class="general_attribute">Hàng đợi</span>
 							<br />
-							<span class="quantity">100</span>
+							<span class="quantity">0</span>
 						</div>
 					</div>
-					<div class="container" id="monitor">
+					<div class="container d-flex flex-column" id="monitor">
 						<div class="flex-row d-flex ms-3 mt-2" id="search_tool">
 							<input
 								class="form-control rounded-pill w-25 h-100"
@@ -153,7 +154,7 @@
 							</table>
 						</div>
 						<div
-							class="row-flex d-flex justify-content-end pagination-row mb-0"
+							class="d-flex justify-content-end pagination-row mb-2 mt-auto"
 						>
 							<label
 								for="pagenumber"
@@ -310,16 +311,22 @@
 						<div class="row d-flex theme-color ms-5 mt-2">
 							THÊM MỚI MÁY IN
 						</div>
-						<form class="container row">
+						<form class="container row m-0 p-0">
 							<div class="col-4">
 								<div
 									class="w-100 h-100 d-flex justify-content-center align-items-center"
 								>
 									<div
-										class="border d-flex justify-content-center align-items-center"
+										class="border d-flex justify-content-center align-items-center w-100"
 										id="upload-image"
 									>
-										<button
+										<img
+											src="./image/admin_printer/printer.png"
+											style="object-fit: contain"
+											class="w-100 h-100"
+											alt=""
+										/>
+										<!-- <button
 											class="btn btn-secondary"
 											type="button"
 										>
@@ -331,7 +338,7 @@
 											id="formFile"
 											name="formFile"
 											style="display: none"
-										/>
+										/> -->
 									</div>
 								</div>
 							</div>
