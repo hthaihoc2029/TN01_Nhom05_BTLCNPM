@@ -18,7 +18,7 @@ async function login(username, password) {
 				status["user"] = res.user;
 			},
 			error: async function (err) {
-				// console.log(err);
+				showToast('failToast','Đăng nhập thất bại')
 			},
 		});
 	} catch (err) {}
@@ -42,7 +42,7 @@ $(document).ready(async function () {
 				Cookies.set(key, loginStatus["user"][key]);
 			}
 			window.location.href = "user_home.html";
-		}
+		} 
 	});
 	// $(document).keydown(function (e) {
 	// 	if (e.which == 13) {
