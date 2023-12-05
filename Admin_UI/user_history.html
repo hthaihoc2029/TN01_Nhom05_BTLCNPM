@@ -16,14 +16,15 @@
 			rel="stylesheet"
 		/>
 		<link href="css/user_history.css" rel="stylesheet" />
-		<title>User history</title>
+		<link rel="shortcut icon" href="./image/icon.ico" type="image/x-icon" />
+		<title>Lịch sử người dùng</title>
 	</head>
 	<body>
 		<!-- <canvas hidden id="myCanvas" width="250" height="100" style="border:1px solid #d3d3d3;">
 </canvas> -->
-		<div class="container-fluid d-flex pt-3">
-			<div class="col-1">
-				<button type="button" class="btn mt-1 py-1" id="back">
+		<div class="container-fluid row p-0 m-0">
+			<div class="col-1 d-flex flex-column pt-3">
+				<button type="button" class="btn mx-2 mt-2 border" id="back">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="16"
@@ -39,8 +40,10 @@
 					</svg>
 				</button>
 			</div>
-			<div class="col-11 pt-5">
-				<div class="row pt-2">
+			<div
+				class="col-11 vh-100 d-flex flex-column justify-content-center"
+			>
+				<div class="row h-75">
 					<div class="col-4 mx-1 bounded border" id="general">
 						<div
 							class="w-100 text-center justify-content-center mt-2 Montserrat theme-color head-title"
@@ -75,7 +78,9 @@
 						</div>
 					</div>
 
-					<div class="col-7 bounded ms-3 Montserrat border">
+					<div
+						class="col-7 bounded ms-3 Montserrat border d-flex flex-column"
+					>
 						<div class="row mt-3 theme-color">
 							<span class="fs-5">Lịch sử in ấn cá nhân</span>
 						</div>
@@ -111,7 +116,7 @@
 							</table>
 						</div>
 						<div
-							class="row-flex d-flex justify-content-end pagination-row mb-2"
+							class="row-flex d-flex justify-content-end pagination-row mb-2 mt-auto"
 						>
 							<label
 								for="pagenumber"
@@ -187,7 +192,7 @@
 			integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
 			crossorigin="anonymous"
 		></script>
-		<script src="js/utils.js"></script>
+		<script src="js/ultil.js"></script>
 		<script src="js/user_history.js"></script>
 	</body>
 </html>

@@ -1,6 +1,8 @@
 const SIZE = 6;
 
-let history;
+var userHistory = [];
+var currPage = 0;
+var params;
 
 function dateProcess(dateString) {
 	let date = new Date(dateString);
@@ -23,11 +25,10 @@ function timeProcess(dateString) {
 	return hh + ":" + mm + ":" + ss;
 }
 
-async function getUserHistory(id) {
-	let res = [];
+async function getUserHistory() {
 	try {
 		await $.ajax({
-			url: `http://localhost:3001/history/${id}`,
+			url: `http://localhost:3001/history/${params.get("ID")}`,
 			method: "GET",
 			beforeSend: function (req) {
 				req.setRequestHeader(
@@ -35,10 +36,10 @@ async function getUserHistory(id) {
 					"Bearer: " + Cookies.get("accessToken")
 				);
 			},
-			success: async function (result, status, xhr) {
-				res = result;
+			success: (result) => {
+				userHistory = result;
 
-				res.sort((first, second) => {
+				userHistory.sort((first, second) => {
 					if (first["Thời gian In"] > second["Thời gian In"])
 						return -1;
 					else if (first["Thời gian In"] < second["Thời gian In"])
@@ -46,34 +47,36 @@ async function getUserHistory(id) {
 					return 0;
 				});
 			},
-			error: async function (result, status, xhr) {
-				console.log(result);
-				console.log(status);
-				console.log(xhr);
+			error: (err) => {
+				console.log(err);
 			},
 		});
 	} catch (err) {
 		await requestToken();
-		return getUserHistory();
+		getUserHistory();
 	}
-	return res;
 }
 
-async function displayHistory(page) {
-	if (history.length == 0) return;
+function displayHistory() {
+	$(".totalPrint").text(userHistory.length);
+
+	if (userHistory.length == 0) return;
+
 	$(".start-day").html(
-		`(tính từ ${dateProcess(history[history.length - 1]["Thời gian In"])})`
+		`(tính từ ${dateProcess(
+			userHistory[userHistory.length - 1]["Thời gian In"]
+		)})`
 	);
 	$("tbody").html("");
 
-	while (page * SIZE >= history.length) page--;
-	if (page < 0) page = 0;
+	while (currPage * SIZE >= userHistory.length) currPage--;
+	if (currPage < 0) currPage = 0;
 
-	let begin = page * SIZE;
-	let end = Math.min((page + 1) * SIZE, history.length);
+	let begin = currPage * SIZE;
+	let end = Math.min((currPage + 1) * SIZE, userHistory.length);
 
 	for (let i = begin; i < end; i++) {
-		let data = history[i];
+		let data = userHistory[i];
 		let row = $('<tr class="my-2"></tr>');
 		row.append($(`<td>${data["Máy in"]}<br></td>`));
 		row.append(
@@ -121,44 +124,48 @@ async function displayHistory(page) {
 			</td>
 			`)
 		);
-		await $("tbody").append(row);
+		$("tbody").append(row);
 	}
-	$("#pageNumber").val(page + 1);
+	$("#pageNumber").val(currPage + 1);
 }
 
 $(document).ready(async function () {
-	// if (!Cookies.get("accessToken")) {
-	// 	window.location.href = "user_login.html";
-	// }
+	if (!Cookies.get("accessToken")) {
+		window.location.href = "user_login.html";
+	}
+	params = new URLSearchParams(window.location.search);
+	await getUserHistory();
 
-	let currPage = 0;
-	let id = (new URLSearchParams(window.location.search)).get('ID')
-	let username = (new URLSearchParams(window.location.search)).get('name')
-	history = await getUserHistory(id);
-	$("#user-name").html(username)
-	$("#user-id").html(id);
+	$("#user-id").html(params.get("ID"));
+	$("#user-name").html(params.get("name"));
 
-	if (history.length == 0) {
+	if (userHistory.length == 0) {
 		$(".pagination-row").prop("hidden", true);
 		$("#export").prop("hidden", true);
 	} else {
 		$(".pagination-row").prop("hidden", false);
 		$("#export").prop("hidden", false);
+		$(".start-day").html(
+			`(tính từ ${dateProcess(
+				userHistory[userHistory.length - 1]["Thời gian In"]
+			)})`
+		);
 	}
+	displayHistory();
 
-	$("#nextPage").click(async function () {
+	$("#nextPage").click(function () {
 		currPage++;
-		await displayHistory(currPage);
+		displayHistory();
 	});
 
-	$("#previousPage").click(async function () {
+	$("#previousPage").click(function () {
 		currPage--;
-		await displayHistory(currPage);
+		displayHistory();
 	});
 
-	$("#gotoPage").click(async function () {
+	$("#gotoPage").click(function () {
 		currPage = $("#pageNumber").val();
-		await displayHistory(currPage);
+		displayHistory();
 	});
 
 	$("#pageNumber").keydown(function (e) {
@@ -168,10 +175,9 @@ $(document).ready(async function () {
 	});
 
 	$(".totalPrint").html(history.length);
-	await displayHistory(0);
+	displayHistory();
 
 	$("#back").click(function () {
 		window.location.href = "./history_management.html";
-		console.log(123);
 	});
 });

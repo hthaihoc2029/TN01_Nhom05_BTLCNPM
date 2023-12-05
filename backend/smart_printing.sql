@@ -474,11 +474,12 @@ DELIMITER ;
 	('QT0004', 'TN0013');
 	-- Insert data into MayIn table
 	INSERT INTO MayIn (Hang, Model, KhayGiay, LoaiMuc, ViTri, TinhTrang, InMau, CongSuat, TrongLuong, DoPhanGiai, Kieu, TocDoIn, KichThuoc, BoNho, AnhMayIn ) VALUES
-	('HP', 'MFP M236DW', '150 tờ/1 khay', 'HP 136X W1360X Đen', '302B1', 'Working', TRUE, '500 Tờ', '60 kg', '600x600 dpi', 'Laser', '30 trang/phút', '418 x 308 x 294.4 mm', '1024 MB' , 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png'),
-	('Canon', 'GM3055', '100 tờ/2 khay', 'Canon CL-741', '106A5', 'Working', FALSE, '4000 Tờ', '50 kg','600x600 dpi', 'Inkjet', '35 trang/phút', '418 x 308 x 494.4 mm', '512 MB' , 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png'),
-	('Canon', 'GM2070', '150-100 tờ/2 khay', 'Canon CL-222', '101H1', 'Working', TRUE, '12900 Tờ', '70 kg','600x600 dpi', 'Laser', '25 trang/phút', '518 x 408 x 994.4 mm', '2048 MB', 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png'),
-	('HP', 'MFP M435DW', '150 tờ/1 khay', 'HP 134X W1340X Đen', '203H6', 'Disabled', TRUE, '10500 Tờ', '30 kg', '600x600 dpi','Laser', '40 trang/phút', '418 x 308 x 294.4 mm', '1024 MB', 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png'),
-	('Canon', 'LBP2900', '200 tờ/1 khay', 'Canon K2240X ', '103C6', 'Working', FALSE, '1500 Tờ', '30 kg', '600x600 dpi','Inkjet', '30 trang/phút', '418 x 308 x 294.4 mm', '768 MB', 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png');
+	('HP', 'MFP M236DW', '150 tờ/khay', 'HP 136X W1360X Đen', '302B1', 'Working', TRUE, '500 Tờ', '60 kg', '600x600 dpi', 'Laser', '30 trang/phút', '418 x 308 x 294.4 mm', '1024 MB' , 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png'),
+	('Canon', 'GM3055', '50 tờ/khay', 'Canon CL-741', '106A5', 'Working', FALSE, '4000 Tờ', '50 kg','600x600 dpi', 'Inkjet', '35 trang/phút', '418 x 308 x 494.4 mm', '512 MB' , 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png'),
+	('Canon', 'GM2070', '75 tờ/khay', 'Canon CL-222', '101H1', 'Working', TRUE, '12900 Tờ', '70 kg','600x600 dpi', 'Laser', '25 trang/phút', '518 x 408 x 994.4 mm', '2048 MB', 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png'),
+	('HP', 'MFP M435DW', '150 tờ/khay', 'HP 134X W1340X Đen', '203H6', 'Disabled', TRUE, '10500 Tờ', '30 kg', '600x600 dpi','Laser', '40 trang/phút', '418 x 308 x 294.4 mm', '1024 MB', 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png'),
+	('Canon', 'LBP2900', '200 tờ/khay', 'Canon K2240X ', '103C6', 'Working', FALSE, '1500 Tờ', '30 kg', '600x600 dpi','Inkjet', '30 trang/phút', '418 x 308 x 294.4 mm', '768 MB', 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png'),
+	('Canon', 'LBP2900', '200 tờ/khay', 'Canon K2240X ', '103C6', 'Working', FALSE, '1500 Tờ', '30 kg', '600x600 dpi','Inkjet', '30 trang/phút', '418 x 308 x 294.4 mm', '768 MB', 'https://s3.pricemestatic.com/Large/Images/RetailerProductImages/StRetailer1450/rp_39470408_0021477728_l.png');
 
 
 	-- Insert data into QuanLyMayIn table

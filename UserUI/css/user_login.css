@@ -64,3 +64,22 @@
 .form-control {
 	border-color: #4834d4;
 }
+#successToast {
+	border-left-color: rgba(0, 204, 153, 1);
+	border-left-width: 3.8px;
+	border-radius: 5px;
+	background: #e3f7f2;
+}
+#failToast {
+	border-left-color: #eb5757;
+	border-left-width: 3.8px;
+	border-radius: 5px;
+	background: #faecec;
+}
+#forget_password {
+	background-color: transparent;
+	border: 0;
+}
+#forget_password:hover {
+	text-decoration: underline;
+}

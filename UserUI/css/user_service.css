@@ -140,10 +140,8 @@ svg > text {
 	padding: 10px;
 }
 .btn-upload {
-	display: flex;
 	justify-content: center;
 	align-items: center;
-	flex-direction: column;
 	background: rgb(232, 232, 232);
 	width: 500px;
 	height: 600px;
@@ -239,4 +237,18 @@ label[for="selectedTime"] {
 #upload-button:hover {
 	cursor: pointer;
 	background-color: #ccc;
+}
+
+#drop_zone img {
+	width: 100%;
+	aspect-ratio: 1/1;
+	object-fit: cover;
+}
+
+.shift-page {
+	opacity: 0.6;
+}
+
+.shift-page:hover {
+	transform: scale(1.2);
 }

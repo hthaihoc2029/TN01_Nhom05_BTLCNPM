@@ -56,8 +56,6 @@ async function getMenuContent() {
 			.join("") ||
 		`<div class="text-secondary align-self-center">Không có tài liệu</div>`;
 
-	console.log(text);
-
 	return `
 		<div class="container-fluid px-0 shadow">
 			<nav class="navbar navbar-light bg-light">

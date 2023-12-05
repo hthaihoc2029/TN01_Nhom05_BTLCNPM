@@ -5,9 +5,26 @@ function deleteFile(fileName) {
 	$(`#br-delete-file${fileIds[fileName]}`).remove();
 	delete fileList[fileName];
 	delete printSettings[fileName];
+	delete fileIds[fileName];
 	URL.revokeObjectURL(fileUrls[fileName]);
 
-	if (fileName === fileNameFocus) unpreviewFile();
+	$("#page-indicator").text("");
+	$(".shift-page").removeClass("d-inline").addClass("d-none");
+
+	resetSettings();
+	if (fileName === fileNameFocus) {
+		unpreviewFile();
+		tabFocus = "";
+		applyFocusTab();
+
+		if (Object.keys(fileIds).length) {
+			fileFocus = Math.min(Object.values(fileIds));
+			fileNameFocus = Object.keys(fileIds).find((name) => {
+				return fileIds[name] == fileFocus;
+			});
+			previewFile(fileNameFocus);
+		}
+	}
 }
 
 function unpreviewFile() {
@@ -32,35 +49,29 @@ var selectPrinterID;
 var files = {};
 var fileIds = {};
 var fileUrls = {};
+var fileDocs = {};
 
-var tabFocus = "btn1";
+var tabFocus = "";
 var fileFocus = 0;
 var fileNameFocus = "";
 
 var _CANVAS;
-
-// load the PDF
-async function showPDF(url) {
-	try {
-		let pdf_doc = await pdfjsLib.getDocument({ url }).promise;
-		showPage(pdf_doc, 1);
-	} catch (error) {
-		console.log(error);
-	}
-}
+var currPage = 1;
 
 // show page of PDF
 async function showPage(doc, page_no) {
+	// const context = document.querySelector("#pdf-preview").getContext("2d");
+	// context.clearRect(0, 0, _CANVAS.width, _CANVAS.height);
 	let page = await doc.getPage(page_no);
 	// set the scale of viewport
 	let scale = Math.min(
-		_CANVAS.width / page.getViewport(1).width,
-		_CANVAS.height / page.getViewport(1).height
+		_CANVAS.width / page.getViewport({ scale: 1 }).width,
+		_CANVAS.height / page.getViewport({ scale: 1 }).height
 	);
 
-	var viewport = page.getViewport(scale);
+	var viewport = page.getViewport({ scale });
 	_CANVAS.width = viewport.width;
-	_CANVAS.style.width = "80%";
+	_CANVAS.style.width = "100%";
 	_CANVAS.height = viewport.height;
 	_CANVAS.style.height = "90%";
 
@@ -73,48 +84,56 @@ async function showPage(doc, page_no) {
 	await page.render(renderContext).promise;
 	$("#pdf-preview").removeClass("d-none");
 	$("#pdf-preview").addClass("d-block");
+	$("#page-indicator").text(`${page_no} / ${doc.numPages}`);
+	$(".shift-page").removeClass("d-none").addClass("d-inline");
 }
 
-function readURL(file) {
+async function readURL(file) {
 	var reader = new FileReader();
-	reader.onloadend = function (e) {
+	reader.onloadend = async function (e) {
 		let name = file.name;
 		srcContents[fileCount] = e.target.result;
 		files[name] = e.target.result;
-		printSettings[name] = {};
 		var url = URL.createObjectURL(file);
 		fileUrls[name] = url;
+		let doc = await pdfjsLib.getDocument({ url }).promise;
+		fileDocs[name] = doc;
+		printSettings[name].pageRangeEnd = doc.numPages;
+		$("#pageRangeEnd").attr({ max: doc.numPages });
+
 		previewFile(name);
 	};
 	reader.readAsDataURL(file);
 }
 
 function previewFile(fileName) {
-	// $("#content-upload").remove();
-	// $("#icon-upload").remove();
-	let htmlIframe = `<iframe src="${files[fileName]}" frameborder="0"></iframe>`;
-	// let htmlIframe = `<object data="${files[fileName]}" type="application/pdf"></object>`;
-	// $(".btn-upload").html(htmlIframe);
-
-	showPDF(fileUrls[fileName]);
+	showPage(fileDocs[fileName], currPage);
 	$("#upload-button").removeClass("d-flex");
 	$("#upload-button").addClass("d-none");
 	$("#preview-file-name").text(fileName);
+	matchSettings(fileName);
 
 	applyFocusFile(fileName);
+
+	tabFocus = "btn1";
 	applyFocusTab();
 }
 
 async function uploadFile() {
 	if (this.files[0].name !== "") {
+		resetSettings();
 		let name = this.files[0].name;
+
 		let extension = name.split(".").at(-1);
 		if (!SUPPORTED_EXTENSIONS.includes(extension)) {
-			showToast("failToast","File extension not supported");
+			showToast("failToast", "Định dạng file không được hỗ trợ");
+			$("#inputFile").val("");
 			return;
 		}
+		fileNameFocus = name;
+		printSettings[name] = {};
 
-		readURL(this.files[0]);
+		await readURL(this.files[0]);
 		let htmlFileName = `
 		<div id="file-print${fileCount}" class="file-print-div file-print_focus">
 			<button onclick="deleteFile('${name}')" class="delete-file" id="delete-file${fileCount}">
@@ -127,7 +146,9 @@ async function uploadFile() {
 		fileIds[name] = fileCount;
 		fileList[name] = htmlFileName;
 		fileCount++;
-		document.querySelector("#inputFile").value = "";
+
+		$("#inputFile").val("");
+		applySettings(name);
 		$("#btn1").click();
 	}
 }
@@ -137,19 +158,25 @@ function preventOpenFile(e) {
 	e.stopPropagation();
 }
 
-function dropHandler(e) {
+async function dropHandler(e) {
 	e.stopPropagation();
 	e.preventDefault();
 
 	var files = e.originalEvent.dataTransfer.files;
 	if (files[0].name !== "") {
 		let name = files[0].name;
+
 		let extension = name.split(".").at(-1);
 		if (!SUPPORTED_EXTENSIONS.includes(extension)) {
-			showToast('failToast',"File extension not supported");
+			showToast("failToast", "Định dạng file không được hỗ trợ");
+			$("#inputFile").val("");
 			return;
 		}
-		readURL(files[0]);
+
+		fileNameFocus = name;
+		printSettings[name] = {};
+
+		await readURL(files[0]);
 		let htmlFileName = `
 		<div id="file-print${fileCount}" class="file-print-div file-print_focus">
 			<button onclick="deleteFile('${name}')" class="delete-file" id="delete-file${fileCount}">
@@ -162,6 +189,9 @@ function dropHandler(e) {
 		fileIds[name] = fileCount;
 		fileList[name] = htmlFileName;
 		fileCount++;
+		$("#inputFile").val("");
+		resetSettings();
+		applySettings(name);
 		$("#btn1").click();
 	}
 }
@@ -185,6 +215,8 @@ $(document).ready(async function () {
 		$("#inputFile").click();
 	});
 
+	$("#printForm").submit(savePrintSettings);
+
 	$("#btn1").click(button1ClickHandler);
 	$("#btn2").click(button2ClickHandler);
 	$("#btn3").click(button3ClickHandler);
@@ -192,8 +224,13 @@ $(document).ready(async function () {
 
 // Lắng nghe sự kiện click trên nút 1
 function button1ClickHandler() {
-	displayInfo(getBtn1Content());
-	for (var name in fileList) $(fileList[name]).appendTo("div.list-files");
+	// If no file selected, return
+	if (fileNameFocus === "") {
+		showToast("failToast", "Hãy upload và chọn file");
+		return;
+	}
+	$("#list-files").html("");
+	for (var name in fileList) $(fileList[name]).appendTo("#list-files");
 
 	applyFocusFile(fileNameFocus);
 
@@ -203,7 +240,14 @@ function button1ClickHandler() {
 
 // Lắng nghe sự kiện click trên nút 2
 async function button2ClickHandler() {
-	displayInfo(await getBtn2Content());
+	// If no file selected, return
+	if (fileNameFocus === "") {
+		showToast("failToast", "Hãy upload và chọn file");
+		return;
+	}
+
+	let text = await getBtn2Content();
+	$("#content-btn2 tbody").html(text);
 
 	tabFocus = "btn2";
 	applyFocusTab();
@@ -211,8 +255,15 @@ async function button2ClickHandler() {
 
 // Lắng nghe sự kiện click trên nút 3
 function button3ClickHandler() {
-	displayInfo(getBtn3Content());
-
+	// If no file selected, return
+	if (fileNameFocus === "") {
+		showToast("failToast", "Hãy upload và chọn file");
+		return;
+	}
+	if (!printSettings[fileNameFocus].printerID) {
+		showToast("failToast", "Hãy chọn máy in");
+		return;
+	}
 	$("#selectedTime").timepicker({
 		timeFormat: "H:i", // 24-hour format
 		minTime: "7:00am",
@@ -234,24 +285,6 @@ function button3ClickHandler() {
 	applyFocusTab();
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-	// Get all buttons with class 'btn-select'
-	var buttons = document.querySelectorAll(".btn-select");
-
-	// Add click event listener to each button
-	buttons.forEach(function (button) {
-		button.addEventListener("click", function () {
-			// Remove 'clicked' class from all buttons
-			buttons.forEach(function (btn) {
-				btn.classList.remove("clicked");
-			});
-
-			// Add 'clicked' class to the clicked button
-			button.classList.add("clicked");
-		});
-	});
-});
-
 // Hàm hiển thị thông tin
 function displayInfo(info) {
 	// Hiển thị thông tin trong phần tử có id là 'infoDisplay'
@@ -262,70 +295,23 @@ function applyFocusTab() {
 	$("#btn1").removeClass("tab-focus");
 	$("#btn2").removeClass("tab-focus");
 	$("#btn3").removeClass("tab-focus");
-	$(`#${tabFocus}`).addClass("tab-focus");
+	$("#content-btn1").addClass("d-none");
+	$("#content-btn2").addClass("d-none");
+	$("#content-btn3").addClass("d-none");
+	if (tabFocus != "") {
+		$(`#${tabFocus}`).addClass("tab-focus");
+		$(`#content-${tabFocus}`).removeClass("d-none");
+	}
 }
 
 function applyFocusFile(fileName) {
+	fileNameFocus = fileName;
 	for (const name in fileIds) {
 		$(`#file-print${fileIds[name]}`).removeClass("file-print_focus");
 	}
-	$(`#file-print${fileIds[fileName]}`).addClass("file-print_focus");
-	fileFocus = fileIds[fileName];
-	fileNameFocus = fileName;
-}
-
-function getBtn1Content() {
-	return `
-		<div class="content-btn1">
-			<div class="config">
-				<h3>Thông số in</h3>
-			
-				<div class="config-action">
-
-					<form action="" id="printForm">
-						<div>
-							<label>Hướng in: </label> <br />
-							<input list="direction" placeholder="Select" id="directionInput" />
-							<datalist id="direction">
-								<option value="Portrait"></option>
-								<option value="Landscape"></option>
-							</datalist>
-						</div>
-					
-						<div>
-							<label>Số trang: </label> <br />
-							<input type="text" placeholder="Enter page range" pattern="[0-9,-]+" title="Enter a valid page range" value="All" id="pageRange" />
-							<!-- Set the default value to "All" -->
-						</div>
-					
-						<div>
-							<label>Số bản: </label> <br />
-							<input type="number" placeholder="Enter number of copies" min="1" id="copy" />
-						</div>
-					
-						<div>
-							<label>Kiểu in: </label> <br />
-							<input list="pages_per_sheet" placeholder="Select" id="printType" />
-							<datalist id="pages_per_sheet">
-								<option value="1 mặt"></option>
-								<option value="2 mặt"></option>
-							</datalist>
-						</div>
-
-						<label>Cỡ giấy: </label> <br />
-						<input list="paper_size" placeholder="Select" id="paperSize" />
-						<datalist id="paper_size">
-							<option value="A4"></option>
-							<option value="A5"></option>
-						</datalist>
-					</form>
-
-					<button id="save_config" type="button" onclick="savePrintSettings()">Save</button>
-				</div>
-			</div>
-			<h3>File in</h3>
-			<div class="list-files"></div>
-		</div>`;
+	if (fileName != "")
+		$(`#file-print${fileIds[fileName]}`).addClass("file-print_focus");
+	fileFocus = fileIds[fileName] || 0;
 }
 
 async function getBtn2Content() {
@@ -339,10 +325,11 @@ async function getBtn2Content() {
 					`Bearer ${Cookies.get("accessToken")}`
 				);
 			},
-			success: (data) =>
-				(printers = data.filter((value) => {
+			success: (data) => {
+				printers = data.filter((value) => {
 					return value.TinhTrang === "Working";
-				})),
+				});
+			},
 		});
 	} catch (err) {
 		await requestToken();
@@ -368,7 +355,7 @@ async function getBtn2Content() {
 							class="btn-select"
 							onclick="selectPrinter('${printer.ID}')" 
 							data-bs-toggle="modal"
-							data-bs-target="#modal"
+							data-bs-target="#selectPrinterModal"
 						>
 							<img src="./images/user_service/printer_select${
 								printer.ID ===
@@ -382,47 +369,7 @@ async function getBtn2Content() {
 		})
 		.join("");
 
-	return `
-		<div class="table-title">Máy in khả dụng</div>
-		<div class="table-header">
-			<table>
-				<thead>
-					<tr>
-						<th></th>
-						<th>MODEL</th>
-						<th>ID</th>
-						<th>VỊ TRÍ</th>
-						<th>TÌNH TRẠNG</th>
-						<th></th>
-					</tr>
-				</thead>
-			</table>
-		</div>
-		<div class="table-content">
-			<table>
-				<tbody>
-					${text}
-				</tbody>
-			</table>
-		</div>
-
-<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h1 class="modal-title fs-5" id="modalLabel">Xác nhận</h1>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				Bạn có chắc muốn chọn máy in này không?
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
-				<button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick='confirmSelectPrinter()'>Xác nhận</button>
-			</div>
-		</div>
-	</div>
-</div>`;
+	return text;
 }
 
 function confirmSelectPrinter() {
@@ -434,194 +381,111 @@ function selectPrinter(id) {
 	selectPrinterID = id;
 }
 
-function getBtn3Content() {
-	return `
-		<form id="dateForm">
-			<label for="selectedDate">
-				Chọn ngày (trong vòng 7 ngày kế tiếp, trong giờ hành chính):
-			</label>
-			<input type="text" id="selectedDate" required />
-			<i class="fa-regular fa-calendar"></i>
-			<button class="time-date" type="button" onclick="validateDate()">
-				Save
-			</button>
-		</form>
-		<form id="timeForm">
-			<label for="selectedTime">
-				Chọn giờ (trong khoảng 7:00 đến 17:00):
-			</label>
-			<input type="text" id="selectedTime" required />
-			<i class="fa-regular fa-clock"></i>
-			<button class="time-date" type="button" onclick="validateTime()">
-				Save
-			</button>
-		</form>
-		<button type="button" class="btn-select" onclick="validateSettings()">
-			<svg xmlns="http://www.w3.org/2000/svg" width="111" height="32" viewBox="0 0 111 32" fill="none">
-				<path d="M0.533203 10.0449C0.533203 4.52208 5.01036 0.0449219 10.5332 0.0449219H100.056C105.579 0.0449219 110.056 4.52207 110.056 10.0449V21.9561C110.056 27.4789 105.579 31.9561 100.056 31.9561H10.5332C5.01035 31.9561 0.533203 27.4789 0.533203 21.9561V10.0449Z" fill="url(#paint0_linear_231_8842)" />
-				<defs>
-					<linearGradient id="paint0_linear_231_8842" x1="8.19712" y1="25.6081" x2="98.9465" y2="-4.91499" gradientUnits="userSpaceOnUse">
-						<stop offset="0.0388426" stop-color="#7A34D4" />
-						<stop offset="0.0739581" stop-color="#4739D4" stop-opacity="0.926042" />
-						<stop offset="0.0791664" stop-color="#5B4FE1" stop-opacity="0.920834" />
-						<stop offset="1" stop-color="#0F96D0" stop-opacity="0.8" />
-					</linearGradient>
-				</defs>
-				<text id="text-select" x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="20" fill="white" >
-					Xác nhận in
-				</text>
-			</svg>
-		</button>
-
-		
-<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h1 class="modal-title fs-5" id="confirmModalLabel">Thông báo</h1>
-			</div>
-			<div class="modal-body">
-				Bạn có xác nhận muốn in tài liệu không?
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
-				<button type="button" class="btn btn-danger" onclick="confirmPrint()">Xác nhận</button>
-			</div>
-		</div>
-	</div>
-</div>`;
-}
-
 async function validateSettings() {
 	// Check if there are any file which haven't been fully configured
-	incompleteFiles = {};
-	for (const fileName in printSettings) {
-		const settings = printSettings[fileName];
-		if (
-			!settings.printDirection ||
-			!settings.pageRange ||
-			!settings.copyCount ||
-			!settings.printType ||
-			!settings.paperType ||
-			!settings.printerID ||
-			!settings.date ||
-			!settings.time
-		) {
-			incompleteFiles[fileName] = [];
-
-			// Haven't configured print settings
-			if (
-				!settings.printDirection ||
-				!settings.pageRange ||
-				!settings.copyCount ||
-				!settings.printType ||
-				!settings.paperType
-			)
-				incompleteFiles[fileName].push("configure print settings");
-
-			// Haven't selected a printer
-			if (!settings.printerID)
-				incompleteFiles[fileName].push("select a printer");
-
-			// Haven't selected a date and time
-			if (!settings.date || !settings.time)
-				incompleteFiles[fileName].push("select a date and time");
-		}
-	}
-
-	// If there is a file with incomplete configuration, alert the user then return
-	if (Object.keys(incompleteFiles).length > 0) {
-		let message = "";
-		for (const fileName in incompleteFiles) {
-			message += `Please ${incompleteFiles[fileName].join(
-				", "
-			)} for file ${fileName}\n`;
-		}
-		// alert(message);
-		showToast('failToast',message)
+	const settings = printSettings[fileNameFocus];
+	if (!settings.date || !settings.time) {
+		showToast("failToast", "Hãy chọn thời gian in");
 		return;
 	}
 
-	// If all settings are valid, ask the user for confirmation
+	// If settings are valid, ask the user for confirmation
 	$("#confirmModal").modal("show");
 }
 
 async function confirmPrint() {
-	// Set timestamp for each print file
-	for (const fileName in printSettings)
-		printSettings[fileName].printTime =
-			printSettings[fileName].date + printSettings[fileName].time;
+	// Set timestamp for print file
+	printSettings[fileNameFocus].printTime =
+		printSettings[fileNameFocus].date + printSettings[fileNameFocus].time;
 
 	// Make a POST request for each file
-	for (const fileName in printSettings) {
-		let temp = {
-			userID: Cookies.get("ID"),
-			fileName,
-			filePath: fileName,
-			printDirection: printSettings[fileName].printDirection,
-			pageCount: printSettings[fileName].pageRange,
-			copyCount: printSettings[fileName].copyCount,
-			printType: printSettings[fileName].printType,
-			paperType: printSettings[fileName].paperType,
-			printerID: printSettings[fileName].printerID,
-			printTime: printSettings[fileName].printTime,
-		};
-		try {
-			await $.ajax("http://localhost:3001/printing", {
-				method: "POST",
-				contentType: "application/json",
-				beforeSend: function (request) {
-					request.setRequestHeader(
-						"Authorization",
-						`Bearer ${Cookies.get("accessToken")}`
-					);
-				},
-				data: JSON.stringify(temp),
-				success: (data) => {
-					console.log(data);
-				},
-				error: (err) => {
-					console.log(err);
-				},
-			});
-		} catch (error) {
-			alert("Error");
-			location.reload();
-		}
-	}
 
-	localStorage.setItem("printSuccess", true);
-	location.href = "./user_home.html";
+	let body = {
+		userID: Cookies.get("ID"),
+		fileName: fileNameFocus,
+		filePath: fileNameFocus,
+		printDirection: printSettings[fileNameFocus].printDirection,
+		pageCount:
+			printSettings[fileNameFocus].pageRangeEnd -
+			printSettings[fileNameFocus].pageRangeBegin +
+			1,
+		copyCount: printSettings[fileNameFocus].copyCount,
+		printType: printSettings[fileNameFocus].printType,
+		paperType: printSettings[fileNameFocus].paperType,
+		printerID: printSettings[fileNameFocus].printerID,
+		printTime: printSettings[fileNameFocus].printTime,
+	};
+	try {
+		await $.ajax("http://localhost:3001/printing", {
+			method: "POST",
+			contentType: "application/json",
+			beforeSend: function (request) {
+				request.setRequestHeader(
+					"Authorization",
+					`Bearer ${Cookies.get("accessToken")}`
+				);
+			},
+			data: JSON.stringify(body),
+			success: (data) => {
+				// console.log(data);
+				showToast("successToast", "Gửi in file thành công");
+				deleteFile(fileNameFocus);
+			},
+			error: (err) => {
+				console.log(err);
+			},
+		});
+	} catch (error) {
+		await requestToken();
+		return confirmPrint();
+		// showToast("failToast", "Xảy ra lỗi khi gửi file in");
+	}
 }
 
-function savePrintSettings() {
-	// Get values from the forms
-	var direction = document.querySelector("#directionInput").value;
-	var pageRange = document.querySelector("#pageRange").value;
-	var numCopies = document.querySelector("#copy").value;
-	var printType = document.querySelector("#printType").value;
-	var paperSize = document.querySelector("#paperSize").value;
-
-	// Check if any field is empty
-	if (!direction || !pageRange || !numCopies || !printType || !paperSize) {
-		// alert(`Vui lòng điền đầy đủ thông tin!`);
-		showToast('failToast','Vui lòng điền đầy đủ thông tin')
+function savePrintSettings(e) {
+	e.preventDefault();
+	if (fileNameFocus === "") {
+		showToast("failToast", "Hãy chọn file");
 		return;
 	}
 
-	// Perform save or further processing here
-	printSettings[fileNameFocus].printDirection = direction;
-	printSettings[fileNameFocus].pageRange = pageRange;
-	printSettings[fileNameFocus].copyCount = numCopies;
-	printSettings[fileNameFocus].printType = printType;
-	printSettings[fileNameFocus].paperType = paperSize;
+	applySettings(fileNameFocus);
 
-	var message = `Hướng in: ${direction}\nSố trang: ${pageRange}\nSố bản: ${numCopies}\nKiểu in: ${printType}\nCỡ giấy: ${paperSize}`;
-	// alert(
-	// 	`Thông số đã được lưu thành công cho file ${fileNameFocus}!\n\n${message}`
-	// );
-	showToast('successToast',`Thông số đã được lưu thành công`)
+	showToast(
+		"successToast",
+		`Thông số đã được lưu thành công cho file ${fileNameFocus}`
+	);
 	$("#btn2").click();
+}
+
+function resetSettings() {
+	$("#directionInput").val("Portrait");
+	$("#pageRangeBegin").val(1);
+	$("#pageRangeEnd").val(0);
+	$("#copy").val(1);
+	$("#printType").val("1 mặt");
+	$("#paperSize").val("A4");
+}
+
+function matchSettings(fileName) {
+	$("#directionInput").val(printSettings[fileName].printDirection);
+	$("#pageRangeBegin").val(printSettings[fileName].pageRangeBegin);
+	$("#pageRangeEnd").val(printSettings[fileName].pageRangeEnd);
+	$("#copy").val(printSettings[fileName].copyCount);
+	$("#printType").val(printSettings[fileName].printType);
+	$("#paperSize").val(printSettings[fileName].paperType);
+}
+
+function applySettings(fileName) {
+	if (fileDocs[fileName]) {
+		$("#pageRangeEnd").val(fileDocs[fileName].numPages);
+	}
+	printSettings[fileName].printDirection = $("#directionInput").val();
+	printSettings[fileName].pageRangeBegin = $("#pageRangeBegin").val();
+	printSettings[fileName].pageRangeEnd = $("#pageRangeEnd").val();
+	printSettings[fileName].copyCount = $("#copy").val();
+	printSettings[fileName].printType = $("#printType").val();
+	printSettings[fileName].paperType = $("#paperSize").val();
 }
 
 function validateDate() {
@@ -629,14 +493,13 @@ function validateDate() {
 
 	// Check if selected date is not null
 	if (inputDate !== null) {
-		// alert("Date is valid!");
-		showToast('successToast',"Date is valid")
+		showToast("successToast", "Chọn ngày thành công");
 		printSettings[fileNameFocus].date = inputDate.getTime();
 	} else {
 		// alert(
 		// 	"Please select a valid date within the next 7 days (excluding weekends)."
 		// );
-		showToast('failToast',"Choose in the next 7 weekdays.")
+		showToast("failToast", "Hãy chọn ngày in");
 	}
 }
 
@@ -645,13 +508,22 @@ function validateTime() {
 
 	// Check if selected time is not empty
 	if (selectedTime !== "") {
-		showToast("successToast","Time is valid!");
+		showToast("successToast", "Chọn giờ thành công");
 		let temp = selectedTime.split(":");
 		printSettings[fileNameFocus].time = temp[0] * 3600 + temp[1] * 60;
 	} else {
 		// alert(
 		// 	"Please select a valid time between 7:00 and 17:00 with 30-minute intervals."
 		// );
-		showToast('failToast',"Invalid time")
+		showToast("failToast", "Hay chọn thời gian in");
 	}
+}
+
+function setViewPage(diff) {
+	if ($(".shift-page").hasClass("d-none")) return;
+	currPage += diff;
+	if (currPage < 1) currPage = 1;
+	if (currPage > fileDocs[fileNameFocus].numPages)
+		currPage = fileDocs[fileNameFocus].numPages;
+	showPage(fileDocs[fileNameFocus], currPage);
 }
