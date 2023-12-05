@@ -1,12 +1,11 @@
-
 /*
 function name: getMenuContent
 This function is to get the right menu content in the page
 @param: None
 @return: string contains the html code of the menu
 */
-let getMenuContent = function(){
-    return `<div class="row pt-2 my-2 justify-content-center" id="logo_container">
+let getMenuContent = function () {
+	return `<div class="row pt-2 my-2 justify-content-center" id="logo_container">
     <img src="image/menu/printer.png" alt="Logo" id="logo">
 </div>
 <div class="row my-2 justify-content-center menu_text">HCMUT SMART PRINTING</div>
@@ -47,37 +46,41 @@ let getMenuContent = function(){
             Phản hồi
         </a>
     </div>
-    <div class="row logout_widget">
+</div>
+    <div class="row logout_widget mt-auto" onclick="logout()">
         <a class="text-start btn">
             <img src="image/menu/Icon - Logout.svg" alt="response" class="pe-2">
             Đăng xuất
         </a>
-    </div>`
-}
+    </div>`;
+};
 /*
 function name: getAccount
 This function is to get the current account in session
 @param: None
 @return: string contains the account name
 */
-let getAccount = function(){
-    return 'hieu.pham14022003'
-}
+let getAccount = function () {
+	return Cookies.get("Ten");
+};
 /*
 function name: getAccountBarContent
 This function is to get the top account information bar
 @param: None
 @return: string contains html code of the top account information bar
 */
-let getAccountBarContent = function(){
-    return `
+let getAccountBarContent = function () {
+	return (
+		`
     <div class="col-6 ps-5">
     <svg xmlns="http://www.w3.org/2000/svg" width="68" height="65" viewBox="0 0 68 65" fill="none">
         <ellipse cx="33.8593" cy="30.8544" rx="33.2372" ry="30.8544" fill="#EEEEEE"/>
         <path d="M47.0289 46.8986C49.7903 46.8986 52.0954 44.62 51.3563 41.9593C50.5382 39.0144 48.9943 36.3021 46.837 34.0991C43.5126 30.7045 39.0038 28.7974 34.3024 28.7974C29.6011 28.7974 25.0923 30.7045 21.7679 34.0991C19.6105 36.3021 18.0667 39.0144 17.2486 41.9593C16.5095 44.62 18.8145 46.8986 21.5759 46.8986L34.3024 46.8986H47.0289Z" fill="black"/>
         <ellipse cx="34.3022" cy="19.3355" rx="8.86325" ry="8.63924" fill="black"/>
         </svg>
-    <span>`+getAccount()+`</span>
+    <span>` +
+		getAccount() +
+		`</span>
     <a class="btn" href="#">
         <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none">
             <path d="M12.5225 14.7867L15.9583 18.0438C16.4757 18.5343 17.3114 18.5343 17.8288 18.0438L21.2647 14.7867C22.1004 13.9944 21.5035 12.6362 20.3228 12.6362H13.4511C12.2704 12.6362 11.6867 13.9944 12.5225 14.7867Z" fill="#0D0D0D"/>
@@ -93,5 +96,14 @@ let getAccountBarContent = function(){
 </a>
 </div>
     `
-}
+	);
+};
 
+function logout() {
+	Cookies.remove("accessToken");
+	Cookies.remove("Ten");
+	Cookies.remove("TenDangNhap");
+	Cookies.remove("ID");
+	Cookies.remove("ChucVu");
+	window.location.href = "login_admin.html";
+}
