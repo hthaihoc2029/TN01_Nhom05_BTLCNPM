@@ -389,28 +389,28 @@ DELIMITER ;
 
 	-- Insert into Người Dùng table
     INSERT INTO NguoiDung ( Ten, TenDangNhap,MatKhau, SoLuongGiay, VaiTro) VALUES
-	('Mọi người', 'everyone','$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi', 00, 'System');
+	('Mọi người', 'everyone','$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', 00, 'System');
 	
 	INSERT INTO NguoiDung ( Ten, TenDangNhap, MatKhau, SoLuongGiay, VaiTro) VALUES
-	('Nguyễn Văn A', 'A.Nguyen', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi',80, 'Student'),
-	('Trần Thị B', 'B.Tran', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi',120, 'Lecturer'),
-	('Lê Văn C', 'C.Le', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi',90, 'Student'),
-	('Phạm Thị D', 'D.Pham', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi',110, 'Lecturer'),
-	('Hoàng Văn E', 'E.Hoang', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi',70, 'Student'),
-	('Ngô Thị F', 'F.Ngo', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi',130, 'Lecturer'),
-	('Đặng Văn G', 'G.Dang', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi',100, 'Student'),
-	('Bùi Thị H', 'H.Bui', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi',150, 'Lecturer'),
-	('Vũ Văn I', 'I.Vu', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi',85, 'Student'),
-	('Trương Thị K', 'K.Truong', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi',95, 'Lecturer');
+	('Nguyễn Văn A', 'A.Nguyen', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',80, 'Student'),
+	('Trần Thị B', 'B.Tran', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',120, 'Lecturer'),
+	('Lê Văn C', 'C.Le', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',90, 'Student'),
+	('Phạm Thị D', 'D.Pham', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',110, 'Lecturer'),
+	('Hoàng Văn E', 'E.Hoang', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',70, 'Student'),
+	('Ngô Thị F', 'F.Ngo', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',130, 'Lecturer'),
+	('Đặng Văn G', 'G.Dang', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',100, 'Student'),
+	('Bùi Thị H', 'H.Bui', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',150, 'Lecturer'),
+	('Vũ Văn I', 'I.Vu', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',85, 'Student'),
+	('Trương Thị K', 'K.Truong', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O',95, 'Lecturer');
 	-- Insert into Quản trị viên table
 	INSERT INTO QuanTriVien (Ten, TenDangNhap, MatKhau, ChucVu) VALUES
-	('Nguyễn Thị L', 'NguyenHoang', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi', 'Officer'),
-	('Trần Văn M', 'TheHieu', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi', 'Manager'),
-	('Lê Thị N', 'XuanTho', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi', ''),
-	('Phạm Văn P', 'TuanMinh', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi', 'Manager'),
-	('Hoàng Thị Q', 'TienTa', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi', 'Officer'),
-	('Ngô Văn R', 'ThaiHoc', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi', 'Director'),
-    ('Hoàng Thị Q', 'AnhKhoa', '$2a$10$sYUhOQXGsogyh.keoQ6ageTImU0yoCm35B5AwL6oINTf5eRh/Jfsi', 'Officer');
+	('Nguyễn Thị L', 'NguyenHoang', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', 'Officer'),
+	('Trần Văn M', 'TheHieu', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', 'Manager'),
+	('Lê Thị N', 'XuanTho', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', 'Officer'),
+	('Phạm Văn P', 'TuanMinh', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', 'Manager'),
+	('Hoàng Thị Q', 'TienTa', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', 'Officer'),
+	('Ngô Văn R', 'ThaiHoc', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', 'Director'),
+    ('Hoàng Thị Q', 'AnhKhoa', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', 'Officer');
 
 
 	-- Insert into LuotMuaGiay table
