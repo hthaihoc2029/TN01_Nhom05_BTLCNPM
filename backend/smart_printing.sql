@@ -282,10 +282,13 @@ CALL UserPrintingHistory()
 	BEGIN
 		SELECT 
 			TaiLieu.Ten AS TenTaiLieu, 
-			TaiLieu.SttHangDoi AS SoThuTuHangDoi
+			TaiLieu.SttHangDoi AS SoThuTuHangDoi,
+			LuotIn.TinhTrang AS TinhTrang
 		FROM TaiLieu
 		INNER JOIN InAn ON TaiLieu.ID_LuotIn = InAn.ID_LuotIn
+		INNER JOIN LuotIn ON TaiLieu.ID_LuotIn = LuotIn.ID
 		WHERE InAn.ID_NguoiDung = p_IDNguoiDung
+		AND LuotIn.TinhTrang <> "Hoàn Thành"
 		ORDER BY TaiLieu.SttHangDoi;
 	END $$
 
@@ -306,7 +309,7 @@ CALL UserPrintingHistory()
 		FROM TaiLieu
 		INNER JOIN InAn ON TaiLieu.ID_LuotIn = InAn.ID_LuotIn
 		INNER JOIN LuotIn ON InAn.ID_LuotIn = LuotIn.ID
-		WHERE InAn.ID_NguoiDung = p_IDNguoiDung AND LuotIn.TinhTrang = 'Hoàn thành';
+		WHERE InAn.ID_NguoiDung = p_IDNguoiDung AND LuotIn.TinhTrang = 'Hoàn Thành';
 	END $$
 
 	DELIMITER ;
@@ -403,7 +406,7 @@ DELIMITER ;
 	INSERT INTO QuanTriVien (Ten, TenDangNhap, MatKhau, ChucVu) VALUES
 	('Nguyễn Thị L', 'NguyenHoang', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', 'Officer'),
 	('Trần Văn M', 'TheHieu', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', 'Manager'),
-	('Lê Thị N', 'XuanTho', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', ''),
+	('Lê Thị N', 'XuanTho', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', 'Officer'),
 	('Phạm Văn P', 'TuanMinh', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', 'Manager'),
 	('Hoàng Thị Q', 'TienTa', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', 'Officer'),
 	('Ngô Văn R', 'ThaiHoc', '$2a$10$Gc8dmWKflXierwfMF.QldeK70W70vZBDapgQsjcu3X10daIQU1s/O', 'Director'),
