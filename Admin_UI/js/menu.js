@@ -23,7 +23,7 @@ let getMenuContent = function () {
         </a>
     </div>
     <div class="row my-2">
-        <a class="menu_text menu_widget text-start btn-sm" id="history_button">
+        <a href="history_management.html" class="menu_text menu_widget text-start btn-sm" id="history_button">
             <img src="image/menu/history.png" alt="history" class="pe-2">
             Lịch sử
         </a>
