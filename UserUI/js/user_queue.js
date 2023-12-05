@@ -1,6 +1,7 @@
 const SIZE = 6;
 
-let queue;
+var queue = [];
+var currPage = 0;
 
 function dateProcess(dateString) {
 	let date = new Date(dateString);
@@ -35,7 +36,7 @@ async function getUserQueue() {
 				);
 			},
 			success: async function (result, status, xhr) {
-				res = result;
+				queue = result;
 			},
 			error: async function (result, status, xhr) {
 				console.log(result);
@@ -45,16 +46,15 @@ async function getUserQueue() {
 		});
 	} catch {
 		await requestToken();
-		return getUserQueue();
+		getUserQueue();
 	}
-	return res;
 }
 
-async function displayQueue(page) {
+function displayQueue() {
 	if (queue.length == 0) return;
 
-	while (page * SIZE >= queue.length) page--;
-	if (page < 0) page = 0;
+	while (currPage * SIZE >= queue.length) currPage--;
+	if (currPage < 0) currPage = 0;
 
 	$(".pagination-row").prop("hidden", false);
 	$("#queue").removeClass("text-secondary");
@@ -63,12 +63,12 @@ async function displayQueue(page) {
 			<div class="col-1"></div>
 			<div class="col-5">Tên file</div>
 			<div class="col-2">Vị trí</div>
-			<div class="col-4"></div>
+			<div class="col-4">Tình trạng</div>
 		</div>`
 	);
 
-	let begin = page * SIZE;
-	let end = Math.min((page + 1) * SIZE, queue.length);
+	let begin = currPage * SIZE;
+	let end = Math.min((currPage + 1) * SIZE, queue.length);
 
 	for (let i = begin; i < end; i++) {
 		let data = queue[i];
@@ -88,7 +88,7 @@ async function displayQueue(page) {
 		$("#queue").append(row);
 	}
 
-	$("#pageNumber").val(page + 1);
+	$("#pageNumber").val(currPage + 1);
 }
 
 $(document).ready(async function () {
@@ -99,25 +99,23 @@ $(document).ready(async function () {
 	// Load nav bar
 	$("#headerbar").html(await getMenuContent());
 
-	let currPage = 0;
-	queue = await getUserQueue();
-
-	await displayQueue(currPage);
+	await getUserQueue();
+	displayQueue();
 
 	if (queue.length == 0) $(".pagination-row").prop("hidden", true);
 	else $(".pagination-row").prop("hidden", false);
 
 	$("#nextPage").click(async function () {
 		currPage++;
-		await displayQueue(currPage);
+		displayQueue();
 	});
 	$("#previousPage").click(async function () {
 		currPage--;
-		await displayQueue(currPage);
+		displayQueue();
 	});
 	$("#gotoPage").click(async function () {
 		currPage = $("#pageNumber").val();
-		await displayQueue(currPage);
+		displayQueue();
 	});
 	$("#pageNumber").keydown(function (e) {
 		if (e.which == 13 && !$(".printer-history").is(":hidden")) {

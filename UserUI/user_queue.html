@@ -17,27 +17,32 @@
 		/>
 		<link rel="stylesheet" href="./css/user_header.css" />
 		<link href="./css/user_history.css" rel="stylesheet" />
-		<title>User Queue</title>
+		<link
+			rel="shortcut icon"
+			href="./images/icon.ico"
+			type="image/x-icon"
+		/>
+		<title>Xem hàng đợi</title>
 	</head>
 	<body>
 		<!-- <canvas hidden id="myCanvas" width="250" height="100" style="border:1px solid #d3d3d3;">
 </canvas> -->
 		<div class="headerbar" id="headerbar"></div>
 		<div
-			class="container-fluid d-flex flex-column align-items-center Montserrat"
+			class="container-fluid d-flex flex-column align-items-center Montserrat vh-100"
 		>
 			<div class="row mt-3 theme-color">
 				<span class="fs-5">Tài liệu đang chờ được in</span>
 			</div>
-			<div class="row bounded mt-2 ms-3 w-50">
+			<div class="row bounded mt-2 pt-2 w-50 h-50">
 				<div
 					id="queue"
-					class="row justify-content-center text-secondary"
+					class="row m-0 p-0 text-secondary flex-column align-items-center"
 				>
 					Không có tài liệu đang chờ in
 				</div>
 				<div
-					class="row-flex d-flex justify-content-end pagination-row mb-2"
+					class="row-flex d-flex justify-content-end pagination-row mb-2 mt-auto"
 				>
 					<label
 						for="pagenumber"

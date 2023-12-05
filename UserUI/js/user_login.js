@@ -1,5 +1,6 @@
-async function preprocessedEmail(username) {
-	return username.slice(0, username.search("@"));
+function preprocessedEmail(username) {
+	if (username.includes("@")) return username.slice(0, username.search("@"));
+	return username;
 }
 async function login(username, password) {
 	let status = { success: false, accessToken: 0, user: 0 };
@@ -18,7 +19,7 @@ async function login(username, password) {
 				status["user"] = res.user;
 			},
 			error: async function (err) {
-				showToast('failToast','Đăng nhập thất bại')
+				showToast("failToast", "Đăng nhập thất bại");
 			},
 		});
 	} catch (err) {}
@@ -42,7 +43,13 @@ $(document).ready(async function () {
 				Cookies.set(key, loginStatus["user"][key]);
 			}
 			window.location.href = "user_home.html";
-		} 
+		} else {
+			showToast("failToast", "Thông tin đăng nhập không chính xác");
+		}
+	});
+
+	$("#forget_password").click(() => {
+		showToast("failToast", "Vui lòng liên hệ với quản trị viên");
 	});
 	// $(document).keydown(function (e) {
 	// 	if (e.which == 13) {
