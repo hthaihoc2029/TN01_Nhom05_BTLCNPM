@@ -110,7 +110,7 @@ async function uploadFile() {
 		let name = this.files[0].name;
 		let extension = name.split(".").at(-1);
 		if (!SUPPORTED_EXTENSIONS.includes(extension)) {
-			alert("File extension not supported");
+			showToast("failToast","File extension not supported");
 			return;
 		}
 
@@ -146,7 +146,7 @@ function dropHandler(e) {
 		let name = files[0].name;
 		let extension = name.split(".").at(-1);
 		if (!SUPPORTED_EXTENSIONS.includes(extension)) {
-			alert("File extension not supported");
+			showToast('failToast',"File extension not supported");
 			return;
 		}
 		readURL(files[0]);
@@ -537,7 +537,8 @@ async function validateSettings() {
 				", "
 			)} for file ${fileName}\n`;
 		}
-		alert(message);
+		// alert(message);
+		showToast('failToast',message)
 		return;
 	}
 
@@ -603,7 +604,8 @@ function savePrintSettings() {
 
 	// Check if any field is empty
 	if (!direction || !pageRange || !numCopies || !printType || !paperSize) {
-		alert(`Vui lòng điền đầy đủ thông tin!`);
+		// alert(`Vui lòng điền đầy đủ thông tin!`);
+		showToast('failToast','Vui lòng điền đầy đủ thông tin')
 		return;
 	}
 
@@ -615,9 +617,10 @@ function savePrintSettings() {
 	printSettings[fileNameFocus].paperType = paperSize;
 
 	var message = `Hướng in: ${direction}\nSố trang: ${pageRange}\nSố bản: ${numCopies}\nKiểu in: ${printType}\nCỡ giấy: ${paperSize}`;
-	alert(
-		`Thông số đã được lưu thành công cho file ${fileNameFocus}!\n\n${message}`
-	);
+	// alert(
+	// 	`Thông số đã được lưu thành công cho file ${fileNameFocus}!\n\n${message}`
+	// );
+	showToast('successToast',`Thông số đã được lưu thành công`)
 	$("#btn2").click();
 }
 
@@ -626,12 +629,14 @@ function validateDate() {
 
 	// Check if selected date is not null
 	if (inputDate !== null) {
-		alert("Date is valid!");
+		// alert("Date is valid!");
+		showToast('successToast',"Date is valid")
 		printSettings[fileNameFocus].date = inputDate.getTime();
 	} else {
-		alert(
-			"Please select a valid date within the next 7 days (excluding weekends)."
-		);
+		// alert(
+		// 	"Please select a valid date within the next 7 days (excluding weekends)."
+		// );
+		showToast('failToast',"Choose in the next 7 weekdays.")
 	}
 }
 
@@ -640,12 +645,13 @@ function validateTime() {
 
 	// Check if selected time is not empty
 	if (selectedTime !== "") {
-		alert("Time is valid!");
+		showToast("successToast","Time is valid!");
 		let temp = selectedTime.split(":");
 		printSettings[fileNameFocus].time = temp[0] * 3600 + temp[1] * 60;
 	} else {
-		alert(
-			"Please select a valid time between 7:00 and 17:00 with 30-minute intervals."
-		);
+		// alert(
+		// 	"Please select a valid time between 7:00 and 17:00 with 30-minute intervals."
+		// );
+		showToast('failToast',"Invalid time")
 	}
 }
