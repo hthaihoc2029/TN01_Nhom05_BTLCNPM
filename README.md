@@ -2,7 +2,7 @@
 ## GROUP TN_05
 
 ## Introduction
-
+This project deploy an web app for Student Smart Printing Service which make printing services easier for students
 ### Project: A smart printing service for students at HCMUT
 
 The university is intent to build a Student Smart Printing Service (HCMUT_SSPS) for serving
@@ -26,3 +26,4 @@ Members:
 Link for web demo: https://drive.google.com/file/d/1qJLDn1CYNgF8yVND7pK6riwkBOeLI65D/view?usp=sharing
 ## Contact
 Email: minh.nguyentuankhmt02@hcmut.edu.vn
+

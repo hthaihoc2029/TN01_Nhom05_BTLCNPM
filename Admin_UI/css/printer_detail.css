@@ -6,7 +6,6 @@
 .back:hover {
 	border-color: blue;
 }
-
 .bounded {
 	border-radius: 10px;
 	background: #fff;
