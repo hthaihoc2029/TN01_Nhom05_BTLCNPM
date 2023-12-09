@@ -1,1 +1,1 @@
-![1700228964662](image/component/1700228964662.png)
+![component - diagram](image/component/component - diagram.png)
