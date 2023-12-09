@@ -1,1 +1,1 @@
-![boxline - diagram](image/boxline/boxline - diagram.png)
+![boxline_diagram](image/boxline/boxline_diagram.png)

@@ -1,1 +1,1 @@
-![deploy - diagram](image/deploy_view/deploy - diagram.png)
+![deploy_diagram](image/deploy_view/deploy_diagram.png)

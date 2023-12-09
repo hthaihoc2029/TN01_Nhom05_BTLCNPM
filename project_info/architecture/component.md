@@ -1,1 +1,1 @@
-![component - diagram](image/component/component - diagram.png)
+![component_diagram](image/component/component_diagram.png)
