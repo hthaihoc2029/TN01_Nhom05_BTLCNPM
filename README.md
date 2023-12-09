@@ -14,7 +14,7 @@ We are honored students in the falcuty of Computer Science & Engineering at Ho C
 
 Members:
 
-- Nguyễn Tuấn Minh - 2110359
+- Nguyễn Tuấn Minh - 2110359 - Leader
 - Tạ Đình Tiến - 2110583
 - Hoàng Đức Nguyên - 2110393
 - Huỳnh Thái Học - 2113443
@@ -23,5 +23,6 @@ Members:
 - Thái Nguyễn Đăng Khoa - 2112673
 
 ## Demo
-
+Link for web demo: https://drive.google.com/file/d/1qJLDn1CYNgF8yVND7pK6riwkBOeLI65D/view?usp=sharing
 ## Contact
+Email: minh.nguyentuankhmt02@hcmut.edu.vn
